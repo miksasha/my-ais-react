@@ -96,6 +96,11 @@ function ManagerAllGoods(props) {
                     <td><input type="checkbox" readOnly/></td>
                     <td>
                         <button onClick={() => {
+                            setid_product(g.id_product);
+                            setproduct_name(g.product_name);
+                            setproducer(g.producer);
+                            setcharacteristics(g.characteristics);
+                            setcategory_number(g.category_number);
                             document.getElementById('edit-allGoodM-pop-up').style.display = 'block';
                         }} className="editButton">Редагувати</button>
                     </td>
