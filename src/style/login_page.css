@@ -1,0 +1,43 @@
+.login_page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+h3, h2{
+    color: #228B22;
+}
+
+.authorization_block{
+    padding: 5%;
+    border: solid #006400;
+    border-radius: 10px;
+    width: 250px;
+}
+.authorization_form{
+    display: flex;
+    flex-direction: column;
+}
+
+.authorization_form label{
+    margin-top: 10px;
+}
+.authorization_form input{
+    height: 25px;
+}
+.authorization_form button{
+    margin-top: 30px;
+    width: 60%;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+}
+.authorization_form button:hover{
+    background-color: #abdbab;
+}
+
+

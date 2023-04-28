@@ -1,0 +1,21 @@
+.information_about_worker .tab{
+    white-space: pre-wrap;
+}
+
+h2{
+    color: #228B22;
+}
+
+fieldset{
+    border: solid #006400;
+}
+
+.submit_profile_changes{
+    width: 200px;
+    height: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+}

@@ -1,0 +1,159 @@
+th{
+    color: #228B22;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    max-width: 100%;
+}
+
+table input{
+    width: 100px;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 5px;
+}
+.filter{
+    display: flex;
+    justify-content: space-between;
+}
+.search_input{
+    margin-right: 10px;
+}
+
+.left-filter{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.left-filter select{
+    margin-right: 30px;
+}
+.addButton{
+    width: 150px;
+    height: 30px;
+    background-color:  #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+.editButton{
+    width: 100px;
+    height: 30px;
+    background-color: #EEE8AA;
+    border: solid #006400;
+    border-radius: 10px;
+}
+
+.deleteButton{
+    width: 100px;
+    height: 30px;
+    background-color: 	#CD5C5C;
+    border: solid #006400;
+    border-radius: 10px;
+}
+.searchButton{
+    width: 80px;
+    height: 30px;
+    background-color:  #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-left: 15px;
+}
+
+.searchButton:hover{
+    background-color: #b3e6b3;
+}
+
+.addButton:hover{
+    background-color: #b3e6b3;
+}
+
+.editButton:hover{
+    background-color: #fcf8ca;
+}
+
+.deleteButton:hover{
+    background-color: 	#f78181;
+}
+
+/* Popup модальне вікно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 70px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+/* Контейнер для всього контенту в модальному вікні */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    height: 70%;
+    overflow: auto;
+}
+
+/* Закривається кнопкою */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Розділити текстові поля */
+form input[type="text"], form textarea, form input[type="number"], form input[type="tel"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 1px solid #228B22;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+/* Стилізація кнопки додавання*/
+.add_good{
+    width: 100px;
+    height: 30px;
+    background-color:  #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
+.add_good:hover{
+    background-color: #b3e6b3;
+}
+
+#additional-fields {
+    display: none;
+    margin-left: 50px;
+}
+
+#availability:checked ~ #additional-fields {
+    display: block;
+}

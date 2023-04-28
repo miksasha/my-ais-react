@@ -1,0 +1,76 @@
+.check{
+    width: min-content;
+}
+
+.check-filter{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.listOfChecks{
+    display: flex;
+    overflow: scroll;
+}
+
+.search{
+    width: 300px;
+    padding: 12px 20px;
+    margin: 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #228B22;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+.numberOfG{
+    display: flex;
+    align-items: center;
+}
+.numberOfG p{
+    margin: 0px 10px 0px 10px;
+}
+
+
+.create_check{
+    width: 150px;
+    height: 30px;
+    background-color:  #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+.create_check:hover{
+    background-color: #b3e6b3;
+}
+.type_and_create_check{
+    width: 250px;
+    height: 30px;
+    background-color:  #8FBC8F;
+    border: solid #006400;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+.type_and_create_check:hover{
+    background-color: #b3e6b3;
+}
+.search_for_check{
+    width: 35%;
+    padding: 12px 20px;
+    margin: 20px 0;
+    box-sizing: border-box;
+    border: 1px solid #228B22;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+}
+
+#main-row:hover{
+    background-color: #fff;
+}
+.tableOfGoods_check tr:hover{
+    background-color: #b3e6b3;
+}
