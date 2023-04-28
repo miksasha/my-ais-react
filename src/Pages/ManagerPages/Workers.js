@@ -44,6 +44,18 @@ function Workers(props) {
         window.location.reload();
     };
 
+    const [showAddWorkerPopup, setShowAddWorkerPopup] = useState(false);
+
+    const handleAddWorkerClick = () => {
+        setShowAddWorkerPopup(true);
+        document.getElementById('add-worker-pop-up').style.display = 'block';
+    };
+
+    const handleClosePopupClick = () => {
+        setShowAddWorkerPopup(false);
+    };
+
+
     return (
 
         <div className="workers">
@@ -57,13 +69,13 @@ function Workers(props) {
                 <div className="right-filter">
                     <input type="text" id="search_input" className="search" placeholder="Пошук за прізвищем"/>
                     <button onClick="" className="searchButton">Шукати</button>
-                    <button onClick="document.getElementById('add-worker-pop-up').style.display = 'block'"
+                    <button onClick={handleAddWorkerClick}
                             className="addButton">Додати працівника
                     </button>
                 </div>
             </div>
             <table className="tableOfGoods">
-                <tr>
+                <thead><tr>
                     <th>ID</th>
                     <th>ПІБ</th>
                     <th>Посада</th>
@@ -76,7 +88,8 @@ function Workers(props) {
                     <th>Індекс</th>
                     <th>Редагувати</th>
                     <th>Видалити</th>
-                </tr>
+                </tr></thead>
+                <tbody>
                 {workers.map(worker => (
                     <tr key={worker.id_employee}>
                         <td>{worker.id_employee}</td>
@@ -96,19 +109,19 @@ function Workers(props) {
                             <button onClick="" className="deleteButton">Видалити</button>
                         </td>
                     </tr>
-                ))}
+                ))}</tbody>
             </table>
-
+            {showAddWorkerPopup && (
             <div id="add-worker-pop-up" className="modal">
                 <div className="modal-content">
             <span className="close"
-                  onClick="document.getElementById('add-worker-pop-up').style.display = 'none'">&times;</span>
+                  onClick={handleClosePopupClick}>&times;</span>
                     <h2>Додавання працівника</h2>
                     <form action="">
                         <label>ПІБ</label>
                         <br/>
                         <label htmlFor="GET-surname" className="tab"> Прізвище:</label>
-                        <input id="GET-surname" type="text" name="surname"/>
+                        <input id="GET-surname" type="text" name="surname" />
                         <br/>
                         <label htmlFor="GET-name" className="tab"> Ім'я:</label>
                         <input id="GET-name" type="text" name="name"/>
@@ -143,7 +156,7 @@ function Workers(props) {
                     </form>
 
                 </div>
-            </div>
+            </div>)}
         </div>
     );
 }
