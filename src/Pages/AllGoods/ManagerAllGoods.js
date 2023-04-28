@@ -169,7 +169,7 @@ function ManagerAllGoods(props) {
                             <input type="checkbox" id="promo" name="promo" value="yes" velue={promotional_product}  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
                         </div>
                         <br/><br/>
-                        <button className="add_good" type="submit" onClick={editGood} name="add_good">Редагувати</button>
+                        <button className="add_good" type="submit" onClick={()=>editGood(id_product)} name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>
