@@ -19,7 +19,8 @@ function ManagerGoodsInStore(props) {
     const [storeProduct, setStoreProduct] = useState([]);
 
     useEffect(()=>{
-        Axios.get("http://localhost:8888/store_products/getAllStore_productWithProductCharacteristics").then(res => {
+        Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
+
             setStoreProduct(res.data)
         })
     },[]);

@@ -67,6 +67,8 @@ function Category(props) {
                     <td>{c.category_name}</td>
                     <td>
                         <button onClick={() => {
+                            setCategory_name(c.category_name);
+                            setCategory_number(c.category_number);
                             document.getElementById('edit-category-pop-up').style.display = 'block';
                         }} className="editButton">Редагувати</button>
                     </td>
