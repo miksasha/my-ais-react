@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
 import Axios from 'axios';
 
@@ -22,6 +22,13 @@ function Workers(props) {
 
     const [workers, setWorkers] = useState([]);
 
+
+    useEffect(()=>{
+        Axios.get("http://localhost:8888/users").then(res => {
+            setWorkers(res.data.data.student)
+        })
+    },[]);
+
     const addToListOfUsers = () => {
         Axios.post("http://localhost:8888/users", {
             id_employee: id_employee,
@@ -43,14 +50,23 @@ function Workers(props) {
         });
         window.location.reload();
     };
+    const deleteUser = (id) => {
+        Axios.delete(`http://localhost:8888/users${id}`);
+        window.location.reload();
+    };
 
     const [showAddWorkerPopup, setShowAddWorkerPopup] = useState(false);
+    const [showEditWorkerPopup, setShowEditWorkerPopup] = useState(false);
 
     const handleAddWorkerClick = () => {
         setShowAddWorkerPopup(true);
         document.getElementById('add-worker-pop-up').style.display = 'block';
     };
 
+    const handleEditWorkerClick = () => {
+        setShowEditWorkerPopup(true);
+        document.getElementById('edit-worker-pop-up').style.display = 'block';
+    };
     const handleClosePopupClick = () => {
         setShowAddWorkerPopup(false);
     };
@@ -69,8 +85,7 @@ function Workers(props) {
                 <div className="right-filter">
                     <input type="text" id="search_input" className="search" placeholder="Пошук за прізвищем"/>
                     <button onClick="" className="searchButton">Шукати</button>
-                    <button onClick={handleAddWorkerClick}
-                            className="addButton">Додати працівника
+                    <button onClick={handleAddWorkerClick} className="addButton">Додати працівника
                     </button>
                 </div>
             </div>
@@ -86,7 +101,7 @@ function Workers(props) {
                     <th>Місто</th>
                     <th>Вулиця</th>
                     <th>Індекс</th>
-                    <th>Редагувати</th>
+                    <th><button onClick={handleEditWorkerClick} className="editButton">Редагувати</button></th>
                     <th>Видалити</th>
                 </tr></thead>
                 <tbody>
@@ -103,7 +118,7 @@ function Workers(props) {
                         <td>{worker.street}</td>
                         <td>{worker.zip_code}</td>
                         <td>
-                            <button onClick="" className="editButton">Редагувати</button>
+                            <button onClick={handleEditWorkerClick} className="editButton">Редагувати</button>
                         </td>
                         <td>
                             <button onClick="" className="deleteButton">Видалити</button>
@@ -157,6 +172,53 @@ function Workers(props) {
 
                 </div>
             </div>)}
+
+            {showEditWorkerPopup && (
+                <div id="edit-worker-pop-up" className="modal">
+                    <div className="modal-content">
+            <span className="close"
+                  onClick={handleClosePopupClick}>&times;</span>
+                        <h2>Додавання працівника</h2>
+                        <form action="">
+                            <label>ПІБ</label>
+                            <br/>
+                            <label htmlFor="GET-surname" className="tab"> Прізвище:</label>
+                            <input id="GET-surname" type="text" name="surname" />
+                            <br/>
+                            <label htmlFor="GET-name" className="tab"> Ім'я:</label>
+                            <input id="GET-name" type="text" name="name"/>
+                            <br/>
+                            <label htmlFor="GET-fathername" className="tab"> Побатькові:</label>
+                            <input id="GET-fathername" type="text" name="fathername"/>
+                            <br/><br/>
+                            <label htmlFor="GET-dateOfBirth">Дата народження:</label>
+                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth"/>
+                            <br/><br/>
+                            <label htmlFor="GET-salary">Зарплата:</label>
+                            <input id="GET-salary" type="number" name="salary"/>
+                            <br/><br/>
+                            <label htmlFor="GET-dateOfStart">Дата початку роботи:</label>
+                            <input id="GET-dateOfStart" type="date" name="dateOfStart"/>
+                            <br/><br/>
+                            <label htmlFor="GET-phone">Телефон:</label>
+                            <input id="GET-phone" type="tel" name="phone"/>
+                            <br/><br/>
+                            <label>Адреса:</label>
+                            <br/>
+                            <label htmlFor="GET-city" className="tab"> Місто:</label>
+                            <input id="GET-city" type="text" name="city"/>
+                            <br/>
+                            <label htmlFor="GET-street" className="tab"> Вулиця:</label>
+                            <input id="GET-street" type="text" name="street"/>
+                            <br/>
+                            <label htmlFor="GET-index" className="tab"> Індекс:</label>
+                            <input id="GET-index" type="text" name="index"/>
+                            <br/><br/>
+                            <button className="add_good" type="submit" name="add_good">Додати</button>
+                        </form>
+
+                    </div>
+                </div>)}
         </div>
     );
 }
