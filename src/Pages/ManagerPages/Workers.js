@@ -22,12 +22,18 @@ function Workers(props) {
 
     const [workers, setWorkers] = useState([]);
 
+    useEffect(() => {
+        getBooks();
+    }, []);
+    const getBooks = () => {
+        Axios.get("http://localhost:8888/users/")
+            .then(res => {
+                console.log(res.data)
+                setWorkers(res.data)
+            })
+            .catch(er => console.log(er));
+    }
 
-    useEffect(()=>{
-        Axios.get("http://localhost:8888/users").then(res => {
-            setWorkers(res.data.data.student)
-        })
-    },[]);
 
     const addToListOfUsers = () => {
         Axios.post("http://localhost:8888/users", {
@@ -51,8 +57,8 @@ function Workers(props) {
         window.location.reload();
     };
     const deleteUser = (id) => {
-        Axios.delete(`http://localhost:8888/users${id}`);
-        window.location.reload();
+       Axios.delete(`http://localhost:8888/users${id}`);
+       window.location.reload();
     };
 
     const handleAddWorkerClick = () => {
@@ -157,7 +163,8 @@ function Workers(props) {
                         <td>{worker.street}</td>
                         <td>{worker.zip_code}</td>
                         <td>
-                            <button onClick={handleEditWorkerClick(
+
+                            <button onClick={()=> handleEditWorkerClick(
                                 worker.empl_surname,
                                 worker.empl_name,
                                 worker.empl_patronymic,
@@ -171,7 +178,7 @@ function Workers(props) {
                                 worker.zip_code)} className="editButton">Редагувати</button>
                         </td>
                         <td>
-                            <button onClick={deleteUser(worker.id_employee)} className="deleteButton">Видалити</button>
+                            {<button onClick={()=> deleteUser(worker.id_employee)} className="deleteButton">Видалити</button>}
                         </td>
                     </tr>
                 ))}</tbody>

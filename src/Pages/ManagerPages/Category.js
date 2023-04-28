@@ -13,7 +13,7 @@ function Category(props) {
 
     useEffect(()=>{
         Axios.get("http://localhost:8888/category").then(res => {
-            setCategory(res.data.data.student)
+            setCategory(res.data.data)
         })
     },[]);
 
