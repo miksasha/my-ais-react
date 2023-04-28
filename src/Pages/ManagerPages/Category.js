@@ -26,15 +26,15 @@ function Category(props) {
         window.location.reload();
     };
     const editCategory = () => {
-        Axios.put(`http://localhost:8888/put/${category_number}`,{
+        Axios.put(`http://localhost:8888/categories`,{
             category_number:category_number,
             category_name:category_name
         });
         document.getElementById('edit-category-pop-up').style.display = 'none';
-        window.location.reload();
+        //window.location.reload();
     };
     const deleteCategory = (id) => {
-        Axios.delete(`http://localhost:8888/category${id}`);
+        Axios.delete(`http://localhost:8888/categories/${id}`);
         window.location.reload();
     };
 
@@ -62,8 +62,8 @@ function Category(props) {
                 </tr>
                 {category.map(c => (
                 <tr key={c.category_number}>
-                    <td>c.category_number</td>
-                    <td>c.category_name</td>
+                    <td>{c.category_number}</td>
+                    <td>{c.category_name}</td>
                     <td>
                         <button onClick={() => {
                             document.getElementById('edit-category-pop-up').style.display = 'block';
