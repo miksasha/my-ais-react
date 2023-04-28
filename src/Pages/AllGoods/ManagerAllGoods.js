@@ -1,7 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
 
 function ManagerAllGoods(props) {
+
+
+    const [showAddAllGoodsPopup, setShowAddAllGoodsPopup] = useState(false);
+    const [showEditAllGoodsPopup, setShowEditAllGoodsPopup] = useState(false);
+    const handleAddCategoryClick = () => {
+        setShowAddAllGoodsPopup(true);
+        document.getElementById('add-pop-up').style.display = 'block';
+
+    };
+
+    const handleEditCategoryClick = () => {
+        setShowEditAllGoodsPopup(true);
+        document.getElementById('edit-pop-up').style.display = 'block';
+
+    };
+    const handleClosePopupClick = () => {
+        setShowAddAllGoodsPopup(false);
+        document.getElementById('add-pop-up').style.display = 'none';
+    };
+
+    const handleEditClosePopupClick = () => {
+        setShowAddAllGoodsPopup(false);
+        document.getElementById('edit-pop-up').style.display = 'none';
+    };
+
     return (
 
         <div className="manager-all-goods">
@@ -19,7 +44,7 @@ function ManagerAllGoods(props) {
                 <div className="right-filter">
                     <input type="text" id="search_input" className="search" placeholder="Пошук по товарам"/>
                     <button onClick="" className="searchButton">Шукати</button>
-                    <button onClick="document.getElementById('add-pop-up').style.display = 'block'"
+                    <button onClick={handleAddCategoryClick}
                             className="addButton">Додати товар
                     </button>
                 </div>
@@ -43,7 +68,7 @@ function ManagerAllGoods(props) {
                     <td>Категорії</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
-                        <button onClick="" className="editButton">Редагувати</button>
+                        <button onClick={handleEditCategoryClick} className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -54,7 +79,7 @@ function ManagerAllGoods(props) {
             <div id="add-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick="document.getElementById('add-pop-up').style.display = 'none'">&times;</span>
+                          onClick={handleClosePopupClick}>&times;</span>
                     <h2>Додавання товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
@@ -77,6 +102,36 @@ function ManagerAllGoods(props) {
                         </div>
                         <br/><br/>
                         <button className="add_good" type="submit" name="add_good">Додати</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="edit-pop-up" className="modal">
+                <div className="modal-content">
+                    <span className="close"
+                          onClick={handleEditClosePopupClick}>&times;</span>
+                    <h2>Редагування товару</h2>
+                    <form>
+                        <label htmlFor="name">Назва:</label>
+                        <input type="text" id="name" name="name" required/><br/><br/>
+                        <label htmlFor="manufacturer">Виробник:</label>
+                        <input type="text" id="manufacturer" name="manufacturer" required/><br/><br/>
+                        <label htmlFor="features">Характеристики:</label>
+                        <textarea id="features" name="features" rows="4" cols="50"></textarea><br/><br/>
+                        <label htmlFor="categories">Категорії:</label>
+                        <input type="text" id="categories" name="categories" required/><br/><br/>
+                        <label htmlFor="availability">Є в наявності:</label>
+                        <input type="checkbox" id="availability" name="availability" value="yes"/><br/><br/>
+                        <div id="additional-fields">
+                            <label htmlFor="price">Ціна товару у грн:</label>
+                            <input type="number" id="price" name="price"/><br/><br/>
+                            <label htmlFor="quantity">Кількість одиниць:</label>
+                            <input type="number" id="quantity" name="quantity"/><br/><br/>
+                            <label htmlFor="promo">Чи є товар акційним?</label>
+                            <input type="checkbox" id="promo" name="promo" value="yes"/>
+                        </div>
+                        <br/><br/>
+                        <button className="add_good" type="submit" name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>

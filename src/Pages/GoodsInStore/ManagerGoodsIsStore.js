@@ -1,7 +1,19 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
 
 function ManagerGoodsIsStore(props) {
+
+    const [showAddGoodsIsStorePopup, setShowAddGoodsIsStorePopup] = useState(false);
+    const [showEditGoodsIsStorePopup, setShowEditGoodsIsStorePopup] = useState(false);
+    const handleEditCategoryClick = () => {
+        setShowAddGoodsIsStorePopup(true);
+        document.getElementById('edit-pop-up').style.display = 'block';
+    };
+    const handleEditGoodsIsStoreClick = () => {
+        setShowAddGoodsIsStorePopup(true);
+        document.getElementById('edit-pop-up').style.display = 'none';
+    };
+
     return (
         <div className="manager_goods_in_store">
             <ManagerLayout/>
@@ -49,7 +61,7 @@ function ManagerGoodsIsStore(props) {
                     <td>TImely number</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
-                        <button onClick="" className="editButton">Редагувати</button>
+                        <button onClick={handleEditCategoryClick} className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -57,11 +69,11 @@ function ManagerGoodsIsStore(props) {
                 </tr>
             </table>
 
-            <div id="add-pop-up" className="modal">
+            <div id="edit-pop-up" className="modal">
                 <div className="modal-content">
-            <span className="close"
-                  onClick="document.getElementById('add-pop-up').style.display = 'none'">&times;</span>
-                    <h2>Додавання товару</h2>
+                    <span className="close"
+                          onClick={handleEditGoodsIsStoreClick}>&times;</span>
+                    <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
                         <input type="text" id="name" name="name" required/><br/><br/>
@@ -72,17 +84,17 @@ function ManagerGoodsIsStore(props) {
                         <label htmlFor="categories">Категорії:</label>
                         <input type="text" id="categories" name="categories" required/><br/><br/>
                         <label htmlFor="availability">Є в наявності:</label>
-                        <input type="checkbox" id="availability" name="availability" required/><br/><br/>
+                        <input type="checkbox" id="availability" name="availability" value="yes"/><br/><br/>
                         <div id="additional-fields">
                             <label htmlFor="price">Ціна товару у грн:</label>
-                            <input type="number" id="price" name="price" required/><br/><br/>
+                            <input type="number" id="price" name="price"/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
-                            <input type="number" id="quantity" name="quantity" required/><br/><br/>
+                            <input type="number" id="quantity" name="quantity"/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
                             <input type="checkbox" id="promo" name="promo" value="yes"/>
                         </div>
                         <br/><br/>
-                        <button className="add_good" type="submit" name="add_good">Додати</button>
+                        <button className="add_good" type="submit" name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>

@@ -55,11 +55,7 @@ function Workers(props) {
         window.location.reload();
     };
 
-    const [showAddWorkerPopup, setShowAddWorkerPopup] = useState(false);
-    const [showEditWorkerPopup, setShowEditWorkerPopup] = useState(false);
-
     const handleAddWorkerClick = () => {
-        setShowAddWorkerPopup(true);
         document.getElementById('add-worker-pop-up').style.display = 'block';
     };
 
@@ -85,7 +81,6 @@ function Workers(props) {
             const popup = document.getElementById('edit-worker-pop-up');
             if (popup) {
                 popup.style.display = 'block';
-                setShowEditWorkerPopup(true);
             }
         }, 0);
     };
@@ -109,7 +104,10 @@ function Workers(props) {
         window.location.reload();
     };
     const handleClosePopupClick = () => {
-        setShowAddWorkerPopup(false);
+        document.getElementById('add-worker-pop-up').style.display = 'none';
+    };
+    const handleEditClosePopupClick = () => {
+        document.getElementById('edit-worker-pop-up').style.display = 'none';
     };
 
 
@@ -178,7 +176,7 @@ function Workers(props) {
                     </tr>
                 ))}</tbody>
             </table>
-            {showAddWorkerPopup && (
+
             <div id="add-worker-pop-up" className="modal">
                 <div className="modal-content">
             <span className="close"
@@ -223,13 +221,12 @@ function Workers(props) {
                     </form>
 
                 </div>
-            </div>)}
+            </div>
 
-            {showEditWorkerPopup && (
                 <div id="edit-worker-pop-up" className="modal">
                     <div className="modal-content">
             <span className="close"
-                  onClick={handleClosePopupClick}>&times;</span>
+                  onClick={handleEditClosePopupClick}>&times;</span>
                         <h2>Редагування працівника</h2>
                         <form action="">    <label>ПІБ</label>
                             <br/>
@@ -269,7 +266,7 @@ function Workers(props) {
                         </form>
 
                     </div>
-                </div>)}
+                </div>
         </div>
     );
 }
