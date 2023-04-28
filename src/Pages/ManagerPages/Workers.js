@@ -63,9 +63,31 @@ function Workers(props) {
         document.getElementById('add-worker-pop-up').style.display = 'block';
     };
 
-    const handleEditWorkerClick = () => {
-        setShowEditWorkerPopup(true);
-        document.getElementById('edit-worker-pop-up').style.display = 'block';
+    const handleEditWorkerClick = ( empl_surname, empl_name, empl_patronymic, empl_role,
+        salary, date_of_birth, date_of_start, phone_number, city, street, zip_code) => {
+        // setShowEditWorkerPopup(true);
+        // document.getElementById('edit-worker-pop-up').style.display = 'block';
+
+        setempl_surname(empl_surname);
+        setempl_name(empl_name);
+        setempl_patronymic(empl_patronymic);
+        setempl_role(empl_role);
+        setsalary(salary);
+        setdate_of_birth(date_of_birth);
+        setdate_of_start(date_of_start);
+        setphone_number(phone_number);
+
+        setcity(city);
+        setstreet(street);
+        setzip_code(zip_code);
+
+        setTimeout(() => {
+            const popup = document.getElementById('edit-worker-pop-up');
+            if (popup) {
+                popup.style.display = 'block';
+                setShowEditWorkerPopup(true);
+            }
+        }, 0);
     };
     const handleClosePopupClick = () => {
         setShowAddWorkerPopup(false);
@@ -118,7 +140,18 @@ function Workers(props) {
                         <td>{worker.street}</td>
                         <td>{worker.zip_code}</td>
                         <td>
-                            <button onClick={handleEditWorkerClick} className="editButton">Редагувати</button>
+                            <button onClick={handleEditWorkerClick(
+                                worker.empl_surname,
+                                worker.empl_name,
+                                worker.empl_patronymic,
+                                worker.empl_role,
+                                worker.salary,
+                                worker.date_of_birth,
+                                worker.date_of_start,
+                                worker.phone_number,
+                                worker.city,
+                                worker.street,
+                                worker.zip_code)} className="editButton">Редагувати</button>
                         </td>
                         <td>
                             <button onClick="" className="deleteButton">Видалити</button>
@@ -178,43 +211,42 @@ function Workers(props) {
                     <div className="modal-content">
             <span className="close"
                   onClick={handleClosePopupClick}>&times;</span>
-                        <h2>Додавання працівника</h2>
-                        <form action="">
-                            <label>ПІБ</label>
+                        <h2>Редагування працівника</h2>
+                        <form action="">    <label>ПІБ</label>
                             <br/>
                             <label htmlFor="GET-surname" className="tab"> Прізвище:</label>
-                            <input id="GET-surname" type="text" name="surname" />
+                            <input id="GET-surname" type="text" name="surname" value={empl_surname}/>
                             <br/>
                             <label htmlFor="GET-name" className="tab"> Ім'я:</label>
-                            <input id="GET-name" type="text" name="name"/>
+                            <input id="GET-name" type="text" name="name" value={empl_name}/>
                             <br/>
                             <label htmlFor="GET-fathername" className="tab"> Побатькові:</label>
-                            <input id="GET-fathername" type="text" name="fathername"/>
+                            <input id="GET-fathername" type="text" name="fathername" value={empl_patronymic}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfBirth">Дата народження:</label>
-                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth"/>
+                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth" value={date_of_birth}/>
                             <br/><br/>
                             <label htmlFor="GET-salary">Зарплата:</label>
-                            <input id="GET-salary" type="number" name="salary"/>
+                            <input id="GET-salary" type="number" name="salary" value={salary}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfStart">Дата початку роботи:</label>
-                            <input id="GET-dateOfStart" type="date" name="dateOfStart"/>
+                            <input id="GET-dateOfStart" type="date" name="dateOfStart" value={date_of_start}/>
                             <br/><br/>
                             <label htmlFor="GET-phone">Телефон:</label>
-                            <input id="GET-phone" type="tel" name="phone"/>
+                            <input id="GET-phone" type="tel" name="phone" value={phone_number}/>
                             <br/><br/>
                             <label>Адреса:</label>
                             <br/>
                             <label htmlFor="GET-city" className="tab"> Місто:</label>
-                            <input id="GET-city" type="text" name="city"/>
+                            <input id="GET-city" type="text" name="city" value={city}/>
                             <br/>
                             <label htmlFor="GET-street" className="tab"> Вулиця:</label>
-                            <input id="GET-street" type="text" name="street"/>
+                            <input id="GET-street" type="text" name="street" value={street}/>
                             <br/>
                             <label htmlFor="GET-index" className="tab"> Індекс:</label>
-                            <input id="GET-index" type="text" name="index"/>
+                            <input id="GET-index" type="text" name="index" value={zip_code}/>
                             <br/><br/>
-                            <button className="add_good" type="submit" name="add_good">Додати</button>
+                            <button className="add_good" type="submit" name="add_good">Редагувати</button>
                         </form>
 
                     </div>
