@@ -89,6 +89,25 @@ function Workers(props) {
             }
         }, 0);
     };
+
+    const editToListOfUsers = () => {
+        Axios.put(`http://localhost:8888/put/${id_employee}`,{
+            id_employee: id_employee,
+            empl_surname: empl_surname,
+            empl_name: empl_name,
+            empl_patronymic: empl_patronymic,
+            empl_role: empl_role,
+            salary: salary,
+            date_of_birth: date_of_birth,
+            date_of_start: date_of_start,
+            phone_number: phone_number,
+            city: city,
+            street: street,
+            zip_code: zip_code
+        });
+        handleClosePopupClick();
+        window.location.reload();
+    };
     const handleClosePopupClick = () => {
         setShowAddWorkerPopup(false);
     };
@@ -123,7 +142,7 @@ function Workers(props) {
                     <th>Місто</th>
                     <th>Вулиця</th>
                     <th>Індекс</th>
-                    <th><button onClick={handleEditWorkerClick} className="editButton">Редагувати</button></th>
+                    <th>Редагувати</th>
                     <th>Видалити</th>
                 </tr></thead>
                 <tbody>
@@ -154,7 +173,7 @@ function Workers(props) {
                                 worker.zip_code)} className="editButton">Редагувати</button>
                         </td>
                         <td>
-                            <button onClick="" className="deleteButton">Видалити</button>
+                            <button onClick={deleteUser(worker.id_employee)} className="deleteButton">Видалити</button>
                         </td>
                     </tr>
                 ))}</tbody>
@@ -215,38 +234,38 @@ function Workers(props) {
                         <form action="">    <label>ПІБ</label>
                             <br/>
                             <label htmlFor="GET-surname" className="tab"> Прізвище:</label>
-                            <input id="GET-surname" type="text" name="surname" value={empl_surname}/>
+                            <input id="GET-surname" type="text" name="surname" value={empl_surname}  onChange={(event)=>{setempl_surname(event.target.value)}}/>
                             <br/>
                             <label htmlFor="GET-name" className="tab"> Ім'я:</label>
-                            <input id="GET-name" type="text" name="name" value={empl_name}/>
+                            <input id="GET-name" type="text" name="name" value={empl_name}  onChange={(event)=>{setempl_name(event.target.value)}}/>
                             <br/>
                             <label htmlFor="GET-fathername" className="tab"> Побатькові:</label>
-                            <input id="GET-fathername" type="text" name="fathername" value={empl_patronymic}/>
+                            <input id="GET-fathername" type="text" name="fathername" value={empl_patronymic}  onChange={(event)=>{setempl_patronymic(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfBirth">Дата народження:</label>
-                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth" value={date_of_birth}/>
+                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth" value={date_of_birth}  onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-salary">Зарплата:</label>
-                            <input id="GET-salary" type="number" name="salary" value={salary}/>
+                            <input id="GET-salary" type="number" name="salary" value={salary}  onChange={(event)=>{setsalary(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfStart">Дата початку роботи:</label>
-                            <input id="GET-dateOfStart" type="date" name="dateOfStart" value={date_of_start}/>
+                            <input id="GET-dateOfStart" type="date" name="dateOfStart" value={date_of_start}  onChange={(event)=>{setdate_of_start(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-phone">Телефон:</label>
-                            <input id="GET-phone" type="tel" name="phone" value={phone_number}/>
+                            <input id="GET-phone" type="tel" name="phone" value={phone_number}  onChange={(event)=>{setphone_number(event.target.value)}}/>
                             <br/><br/>
                             <label>Адреса:</label>
                             <br/>
                             <label htmlFor="GET-city" className="tab"> Місто:</label>
-                            <input id="GET-city" type="text" name="city" value={city}/>
+                            <input id="GET-city" type="text" name="city" value={city}  onChange={(event)=>{setcity(event.target.value)}}/>
                             <br/>
                             <label htmlFor="GET-street" className="tab"> Вулиця:</label>
-                            <input id="GET-street" type="text" name="street" value={street}/>
+                            <input id="GET-street" type="text" name="street" value={street}  onChange={(event)=>{setstreet(event.target.value)}}/>
                             <br/>
                             <label htmlFor="GET-index" className="tab"> Індекс:</label>
-                            <input id="GET-index" type="text" name="index" value={zip_code}/>
+                            <input id="GET-index" type="text" name="index" value={zip_code}  onChange={(event)=>{setzip_code(event.target.value)}}/>
                             <br/><br/>
-                            <button className="add_good" type="submit" name="add_good">Редагувати</button>
+                            <button className="add_good" type="submit" onClick={editToListOfUsers} name="add_good">Редагувати</button>
                         </form>
 
                     </div>
