@@ -57,8 +57,10 @@ function Workers(props) {
         window.location.reload();
     };
     const deleteUser = (id) => {
-       Axios.delete(`http://localhost:8888/users${id}`);
-       window.location.reload();
+
+       Axios.delete(`http://localhost:8888/users/${id}`);
+           window.location.reload();
+
     };
 
     const handleAddWorkerClick = () => {
