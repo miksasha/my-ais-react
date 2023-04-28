@@ -97,6 +97,9 @@ function Category(props) {
                     }}>&times;</span>
                     <h2>Редагування категорії</h2>
                     <form>
+                        <label htmlFor="id_category">Номер:</label>
+                        <input type="text" id="id_category" name="name" readOnly value={category_number}/><br/><br/>
+
                         <label htmlFor="name">Назва:</label>
                         <input type="text" id="name" name="name" required value={category_name} onChange={(event)=>{setCategory_name(event.target.value)}}/><br/><br/>
                         <button className="add_good" type="submit" onClick={()=>editCategory(category_number)}  name="add_good">Редагувати</button>
