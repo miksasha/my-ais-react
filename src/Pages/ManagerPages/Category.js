@@ -25,13 +25,14 @@ function Category(props) {
         });
         window.location.reload();
     };
-    const editCategory = () => {
+    const editCategory = (id) => {
         Axios.put(`http://localhost:8888/categories`,{
-            category_number:category_number,
+            category_number:id,
             category_name:category_name
         });
         document.getElementById('edit-category-pop-up').style.display = 'none';
-        //window.location.reload();
+       // window.location.reload();
+
     };
     const deleteCategory = (id) => {
         Axios.delete(`http://localhost:8888/categories/${id}`);
@@ -98,7 +99,7 @@ function Category(props) {
                     <form>
                         <label htmlFor="name">Назва:</label>
                         <input type="text" id="name" name="name" required value={category_name} onChange={(event)=>{setCategory_name(event.target.value)}}/><br/><br/>
-                        <button className="add_good" type="submit" onClick={()=>editCategory}  name="add_good">Редагувати</button>
+                        <button className="add_good" type="submit" onClick={()=>editCategory(category_number)}  name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>
