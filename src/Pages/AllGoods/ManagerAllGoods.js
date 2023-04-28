@@ -1,7 +1,56 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
+import Axios from "axios";
 
 function ManagerAllGoods(props) {
+    const [id_product, setid_product] = useState('');
+    const [category_number, setcategory_number] = useState(0);
+    const [product_name, setproduct_name] = useState('');
+    const [producer, setproducer] = useState('');
+    const [characteristics, setcharacteristics] = useState('');
+
+
+    const [isInStore, setisInStore] = useState(false);
+    const [selling_price, setselling_price] = useState(0);
+    const [products_number, setproducts_number] = useState('');
+    const [promotional_product, setpromotional_product] = useState(true);
+
+    const [goods, setGoods] = useState([]);
+
+    useEffect(()=>{
+        Axios.get("http://localhost:8888/products").then(res => {
+            setGoods(res.data)
+        })
+    },[]);
+
+    const addGood = () => {
+        Axios.post("http://localhost:8888/products", {
+            id_product:id_product,
+            category_number:category_number,
+            product_name:product_name,
+            producer:producer,
+            characteristics:characteristics
+        }).then(response => {
+            setGoods([...goods, response.data]);
+        });
+        window.location.reload();
+    };
+
+    const editGood = (id) => {
+        Axios.put(`http://localhost:8888/products/${id}`,{
+            id_product:id_product,
+            category_number:category_number,
+            product_name:product_name,
+            producer:producer,
+            characteristics:characteristics
+        });
+        document.getElementById('edit-allGoodM-pop-up').style.display = 'none';
+        // window.location.reload();
+    };
+    const deleteGood = (id) => {
+        Axios.delete(`http://localhost:8888/products/${id}`);
+        window.location.reload();
+    };
 
     return (
         <div className="manager-all-goods">
@@ -37,12 +86,13 @@ function ManagerAllGoods(props) {
                     <th>Редагувати</th>
                     <th>Видалити</th>
                 </tr>
-                <tr>
-                    <td>Timely id</td>
-                    <td>Timely name</td>
-                    <td>Timely vurobnuk</td>
-                    <td>Timely ch</td>
-                    <td>Категорії</td>
+                {goods.map(g => (
+                <tr key={g.id_product}>
+                    <td>{g.id_product}</td>
+                    <td>{g.product_name}</td>
+                    <td>{g.producer}</td>
+                    <td>{g.characteristics}</td>
+                    <td>{g.category_number}</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
                         <button onClick={() => {
@@ -50,9 +100,9 @@ function ManagerAllGoods(props) {
                         }} className="editButton">Редагувати</button>
                     </td>
                     <td>
-                        <button onClick="" className="deleteButton">Видалити</button>
+                        <button onClick={deleteGood} className="deleteButton">Видалити</button>
                     </td>
-                </tr>
+                </tr>))}
             </table>
 
             <div id="add-allGoodM-pop-up" className="modal">
@@ -64,25 +114,25 @@ function ManagerAllGoods(props) {
                     <h2>Додавання товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
-                        <input type="text" id="name" name="name" required/><br/><br/>
+                        <input type="text" id="name" name="name" required onChange={(event)=>{setproduct_name(event.target.value)}}/><br/><br/>
                         <label htmlFor="manufacturer">Виробник:</label>
-                        <input type="text" id="manufacturer" name="manufacturer" required/><br/><br/>
+                        <input type="text" id="manufacturer" name="manufacturer" required onChange={(event)=>{setproducer(event.target.value)}}/><br/><br/>
                         <label htmlFor="features">Характеристики:</label>
-                        <textarea id="features" name="features" rows="4" cols="50"></textarea><br/><br/>
+                        <textarea id="features" name="features" rows="4" cols="50" onChange={(event)=>{setcharacteristics(event.target.value)}}></textarea><br/><br/>
                         <label htmlFor="categories">Категорії:</label>
-                        <input type="text" id="categories" name="categories" required/><br/><br/>
+                        <input type="text" id="categories" name="categories" required onChange={(event)=>{setcategory_number(event.target.value)}}/><br/><br/>
                         <label htmlFor="availability">Є в наявності:</label>
-                        <input type="checkbox" id="availability" name="availability" value="yes"/><br/><br/>
+                        <input type="checkbox" id="availability" name="availability" onChange={(event)=>{setisInStore(event.target.value)}}/><br/><br/>
                         <div id="additional-fields">
                             <label htmlFor="price">Ціна товару у грн:</label>
-                            <input type="number" id="price" name="price"/><br/><br/>
+                            <input type="number" id="price" name="price"  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
-                            <input type="number" id="quantity" name="quantity"/><br/><br/>
+                            <input type="number" id="quantity" name="quantity"  onChange={(event)=>{setproducts_number(event.target.value)}}/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
-                            <input type="checkbox" id="promo" name="promo" value="yes"/>
+                            <input type="checkbox" id="promo" name="promo" value="yes"  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
                         </div>
                         <br/><br/>
-                        <button className="add_good" type="submit" name="add_good">Додати</button>
+                        <button className="add_good" type="submit" onClick={addGood} name="add_good">Додати</button>
                     </form>
                 </div>
             </div>
@@ -96,25 +146,25 @@ function ManagerAllGoods(props) {
                     <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
-                        <input type="text" id="name" name="name" required/><br/><br/>
+                        <input type="text" id="name" name="name" required velue={product_name} onChange={(event)=>{setproduct_name(event.target.value)}}/><br/><br/>
                         <label htmlFor="manufacturer">Виробник:</label>
-                        <input type="text" id="manufacturer" name="manufacturer" required/><br/><br/>
+                        <input type="text" id="manufacturer" name="manufacturer" required velue={producer} onChange={(event)=>{setproducer(event.target.value)}}/><br/><br/>
                         <label htmlFor="features">Характеристики:</label>
-                        <textarea id="features" name="features" rows="4" cols="50"></textarea><br/><br/>
+                        <textarea id="features" name="features" rows="4" cols="50" velue={characteristics}  onChange={(event)=>{setcharacteristics(event.target.value)}}></textarea><br/><br/>
                         <label htmlFor="categories">Категорії:</label>
-                        <input type="text" id="categories" name="categories" required/><br/><br/>
+                        <input type="text" id="categories" name="categories" required velue={category_number} onChange={(event)=>{setcategory_number(event.target.value)}}/><br/><br/>
                         <label htmlFor="availability">Є в наявності:</label>
-                        <input type="checkbox" id="availability" name="availability" value="yes"/><br/><br/>
+                        <input type="checkbox" id="availability" name="availability"  velue={isInStore} onChange={(event)=>{setisInStore(event.target.value)}}/><br/><br/>
                         <div id="additional-fields">
                             <label htmlFor="price">Ціна товару у грн:</label>
-                            <input type="number" id="price" name="price"/><br/><br/>
+                            <input type="number" id="price" name="price" velue={selling_price}  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
-                            <input type="number" id="quantity" name="quantity"/><br/><br/>
+                            <input type="number" id="quantity" name="quantity" velue={products_number}  onChange={(event)=>{setproducts_number(event.target.value)}}/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
-                            <input type="checkbox" id="promo" name="promo" value="yes"/>
+                            <input type="checkbox" id="promo" name="promo" value="yes" velue={promotional_product}  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
                         </div>
                         <br/><br/>
-                        <button className="add_good" type="submit" name="add_good">Редагувати</button>
+                        <button className="add_good" type="submit" onClick={editGood} name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>
