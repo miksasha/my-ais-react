@@ -1,18 +1,7 @@
 import React, {useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
 
-function ManagerGoodsIsStore(props) {
-
-    const [showAddGoodsIsStorePopup, setShowAddGoodsIsStorePopup] = useState(false);
-    const [showEditGoodsIsStorePopup, setShowEditGoodsIsStorePopup] = useState(false);
-    const handleEditCategoryClick = () => {
-        setShowAddGoodsIsStorePopup(true);
-        document.getElementById('edit-pop-up').style.display = 'block';
-    };
-    const handleEditGoodsIsStoreClick = () => {
-        setShowAddGoodsIsStorePopup(true);
-        document.getElementById('edit-pop-up').style.display = 'none';
-    };
+function ManagerGoodsInStore(props) {
 
     return (
         <div className="manager_goods_in_store">
@@ -61,7 +50,9 @@ function ManagerGoodsIsStore(props) {
                     <td>TImely number</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
-                        <button onClick={handleEditCategoryClick} className="editButton">Редагувати</button>
+                        <button onClick={() => {
+                            document.getElementById('add-GoodInStoreM-pop-up').style.display = 'block';
+                        }}className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -69,10 +60,12 @@ function ManagerGoodsIsStore(props) {
                 </tr>
             </table>
 
-            <div id="edit-pop-up" className="modal">
+            <div id="add-GoodInStoreM-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick={handleEditGoodsIsStoreClick}>&times;</span>
+                          onClick={() => {
+                              document.getElementById('add-GoodInStoreM-pop-up').style.display = 'none';
+                          }}>&times;</span>
                     <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
@@ -102,4 +95,4 @@ function ManagerGoodsIsStore(props) {
     );
 }
 
-export default ManagerGoodsIsStore;
+export default ManagerGoodsInStore;

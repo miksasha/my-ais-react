@@ -3,7 +3,6 @@ import ManagerLayout from "../Layout/ManagerLayout";
 
 function ManagerAllChecks(props) {
     return (
-
         <div className="manager-all-checks">
             <ManagerLayout/>
             <h2>Фільтрація чеків</h2>

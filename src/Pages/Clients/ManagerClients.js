@@ -3,22 +3,6 @@ import ManagerLayout from "../Layout/ManagerLayout";
 
 function ManagerClients(props) {
 
-    const handleAddClientsClick = () => {
-        document.getElementById('add-client-pop-up').style.display = 'block';
-
-    };
-
-    const handleEditClientsClick = () => {
-        document.getElementById('edit-client-pop-up').style.display = 'block';
-
-    };
-    const handleClosePopupClick = () => {
-        document.getElementById('add-client-pop-up').style.display = 'none';
-    };
-
-    const handleEditClosePopupClick = () => {
-        document.getElementById('edit-client-pop-up').style.display = 'none';
-    };
 
     return (
         <div className="all-manager-clients">
@@ -34,7 +18,9 @@ function ManagerClients(props) {
                 <div className="right-filter">
                     <input type="text" id="search_surname" className="search" placeholder="Пошук по прізвищу"/>
                     <button onClick="" className="searchButton">Шукати</button>
-                    <button onClick={handleAddClientsClick}
+                    <button onClick={() => {
+                        document.getElementById('add-client-pop-up').style.display = 'block';
+                    }}
                             className="addButton ">Додати клієнта
                     </button>
                 </div>
@@ -56,7 +42,9 @@ function ManagerClients(props) {
                     <td>Місто, вул, індекс</td>
                     <td>%</td>
                     <td>
-                        <button onClick={handleEditClientsClick} className="editButton">Редагувати</button>
+                        <button onClick={() => {
+                            document.getElementById('edir-client-pop-up').style.display = 'block';
+                        }} className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -67,7 +55,9 @@ function ManagerClients(props) {
             <div id="add-client-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick={handleClosePopupClick}>&times;</span>
+                          onClick={() => {
+                              document.getElementById('add-client-pop-up').style.display = 'none';
+                          }}>&times;</span>
                     <h2>Додавання клієта</h2>
                     <form className="information_about_worker" action="">
                         <label>ПІБ</label>
@@ -108,7 +98,9 @@ function ManagerClients(props) {
             <div id="edit-client-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick={handleEditClosePopupClick}>&times;</span>
+                          onClick={() => {
+                              document.getElementById('edit-client-pop-up').style.display = 'none';
+                          }}>&times;</span>
                     <h2>Редагування клієта</h2>
                     <form className="information_about_worker" action="">
                         <label>ПІБ</label>

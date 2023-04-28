@@ -2,6 +2,14 @@ import React from 'react';
 import CashierLayout from "../Layout/CashierLayout";
 
 function CashierGoodsInStore(props) {
+
+    const handleEditCategoryClick = () => {
+        document.getElementById('edit-goodsInStore-pop-up').style.display = 'block';
+
+    };
+    const handleEditClosePopupClick = () => {
+        document.getElementById('edit-goodsInStore-pop-up').style.display = 'none';
+    };
     return (
         <div className="goods_in_store">
             <CashierLayout/>
@@ -49,7 +57,7 @@ function CashierGoodsInStore(props) {
                     <td>TImely number</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
-                        <button onClick="" className="editButton">Редагувати</button>
+                        <button onClick={handleEditCategoryClick} className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -58,11 +66,11 @@ function CashierGoodsInStore(props) {
             </table>
 
 
-            <div id="add-pop-up" className="modal">
+            <div id="edit-goodsInStore-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick="document.getElementById('add-pop-up').style.display = 'none'">&times;</span>
-                    <h2>Додавання товару</h2>
+                          onClick={handleEditClosePopupClick}>&times;</span>
+                    <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
                         <input type="text" id="name" name="name" required/><br/><br/>
@@ -83,7 +91,7 @@ function CashierGoodsInStore(props) {
                             <input type="checkbox" id="promo" name="promo" value="yes"/>
                         </div>
                         <br/><br/>
-                        <button className="add_good" type="submit" name="add_good">Додати</button>
+                        <button className="add_good" type="submit" name="add_good">Редагувати</button>
                     </form>
                 </div>
             </div>

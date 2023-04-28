@@ -3,32 +3,7 @@ import ManagerLayout from "../Layout/ManagerLayout";
 
 function ManagerAllGoods(props) {
 
-
-    const [showAddAllGoodsPopup, setShowAddAllGoodsPopup] = useState(false);
-    const [showEditAllGoodsPopup, setShowEditAllGoodsPopup] = useState(false);
-    const handleAddCategoryClick = () => {
-        setShowAddAllGoodsPopup(true);
-        document.getElementById('add-pop-up').style.display = 'block';
-
-    };
-
-    const handleEditCategoryClick = () => {
-        setShowEditAllGoodsPopup(true);
-        document.getElementById('edit-pop-up').style.display = 'block';
-
-    };
-    const handleClosePopupClick = () => {
-        setShowAddAllGoodsPopup(false);
-        document.getElementById('add-pop-up').style.display = 'none';
-    };
-
-    const handleEditClosePopupClick = () => {
-        setShowAddAllGoodsPopup(false);
-        document.getElementById('edit-pop-up').style.display = 'none';
-    };
-
     return (
-
         <div className="manager-all-goods">
             <ManagerLayout/>
             <h2>Товари, що можуть бути в магазині</h2>
@@ -44,7 +19,9 @@ function ManagerAllGoods(props) {
                 <div className="right-filter">
                     <input type="text" id="search_input" className="search" placeholder="Пошук по товарам"/>
                     <button onClick="" className="searchButton">Шукати</button>
-                    <button onClick={handleAddCategoryClick}
+                    <button onClick={() => {
+                        document.getElementById('add-allGoodM-pop-up').style.display = 'block';
+                    }}
                             className="addButton">Додати товар
                     </button>
                 </div>
@@ -68,7 +45,9 @@ function ManagerAllGoods(props) {
                     <td>Категорії</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
-                        <button onClick={handleEditCategoryClick} className="editButton">Редагувати</button>
+                        <button onClick={() => {
+                            document.getElementById('edit-allGoodM-pop-up').style.display = 'block';
+                        }} className="editButton">Редагувати</button>
                     </td>
                     <td>
                         <button onClick="" className="deleteButton">Видалити</button>
@@ -76,10 +55,12 @@ function ManagerAllGoods(props) {
                 </tr>
             </table>
 
-            <div id="add-pop-up" className="modal">
+            <div id="add-allGoodM-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick={handleClosePopupClick}>&times;</span>
+                          onClick={() => {
+                              document.getElementById('add-allGoodM-pop-up').style.display = 'none';
+                          }}>&times;</span>
                     <h2>Додавання товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
@@ -106,10 +87,12 @@ function ManagerAllGoods(props) {
                 </div>
             </div>
 
-            <div id="edit-pop-up" className="modal">
+            <div id="edit-allGoodM-pop-up" className="modal">
                 <div className="modal-content">
                     <span className="close"
-                          onClick={handleEditClosePopupClick}>&times;</span>
+                          onClick={() => {
+                              document.getElementById('edit-allGoodM-pop-up').style.display = 'none';
+                          }}>&times;</span>
                     <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
