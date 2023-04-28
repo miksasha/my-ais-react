@@ -1,7 +1,51 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
+import Axios from "axios";
 
 function ManagerGoodsInStore(props) {
+
+    const [upc, setupc] = useState('');
+    const [upc_prom, setupc_prom] = useState('');
+    const [id_product, setid_product] = useState('');
+    const [selling_price, setselling_price] = useState(0);
+    const [products_number, setproducts_number] = useState('');
+    const [promotional_product, setpromotional_product] = useState(true);
+
+    const [category_number, setcategory_number] = useState(0);
+    const [product_name, setproduct_name] = useState('');
+    const [producer, setproducer] = useState('');
+    const [characteristics, setcharacteristics] = useState('');
+
+    const [storeProduct, setStoreProduct] = useState([]);
+
+    useEffect(()=>{
+        Axios.get("http://localhost:8888/store_products/getAllStore_productWithProductCharacteristics").then(res => {
+            setStoreProduct(res.data)
+        })
+    },[]);
+
+    const editGoodsInStore = () => {
+        Axios.put("http://localhost:8888/categories", {
+            upc:upc,
+            upc_prom:upc_prom,
+            id_product:id_product,
+            selling_price:selling_price,
+            products_number:products_number,
+            promotional_product:promotional_product,
+
+            category_number:category_number,
+            product_name:product_name,
+            producer:producer,
+            characteristics:characteristics
+        });
+        document.getElementById('add-GoodInStoreM-pop-up').style.display = 'none';
+        window.location.reload();
+    };
+
+    const deleteGoodsInStore = (id) => {
+        Axios.delete(`http://localhost:8888/categories/${id}`);
+        window.location.reload();
+    };
 
     return (
         <div className="manager_goods_in_store">
@@ -33,21 +77,20 @@ function ManagerGoodsInStore(props) {
                     <th>Назва</th>
                     <th>Виробник</th>
                     <th>Характеристики</th>
-                    <th>Категорії</th>
                     <th>Ціна</th>
                     <th>Кількість одииць</th>
                     <th>Є акційним</th>
                     <th>Редагувати</th>
                     <th>Видалити</th>
                 </tr>
-                <tr>
-                    <td>Timely id</td>
-                    <td>Timely name</td>
-                    <td>Timely vurobnuk</td>
-                    <td>Timely ch</td>
-                    <td>Категорії</td>
-                    <td>Timely price</td>
-                    <td>TImely number</td>
+                {storeProduct.map(g => (
+                    <tr key={g.category_number}>
+                    <td>{g.upc}</td>
+                    <td>{g.product_name}</td>
+                    <td>{g.producer}</td>
+                    <td>{g.characteristics}</td>
+                    <td>{g.selling_price}</td>
+                    <td>{g.products_number}</td>
                     <td><input type="checkbox" readOnly/></td>
                     <td>
                         <button onClick={() => {
@@ -55,9 +98,9 @@ function ManagerGoodsInStore(props) {
                         }}className="editButton">Редагувати</button>
                     </td>
                     <td>
-                        <button onClick="" className="deleteButton">Видалити</button>
+                        <button onClick={deleteGoodsInStore} className="deleteButton">Видалити</button>
                     </td>
-                </tr>
+                </tr>))}
             </table>
 
             <div id="add-GoodInStoreM-pop-up" className="modal">
