@@ -13,7 +13,7 @@ import Workers from "./Pages/ManagerPages/Workers"
 import ClientManager from "./Pages/Clients/ManagerClients"
 import Category from "./Pages/ManagerPages/Category"
 import AllGoodsManager from "./Pages/AllGoods/ManagerAllGoods"
-import GoodsInStoreManager from "./Pages/GoodsInStore/ManagerGoodsIsStore"
+import GoodsInStoreManager from "./Pages/GoodsInStore/ManagerGoodsInStore"
 import AllCheckManager from "./Pages/Check/ManagerAllChecks"
 import './App.css';
 
