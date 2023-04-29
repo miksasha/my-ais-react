@@ -124,7 +124,7 @@ td, th {
 }
 
 /* Розділити текстові поля */
-form input[type="text"], form textarea, form input[type="number"], form input[type="tel"] {
+form input[type="text"], form textarea, form input[type="number"], form input[type="tel"], form input[type="email"], form input[type="password"] {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;

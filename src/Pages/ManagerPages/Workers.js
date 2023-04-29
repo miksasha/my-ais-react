@@ -10,7 +10,7 @@ function Workers(props) {
     const [empl_name, setempl_name] = useState('');
     const [empl_role, setempl_role] = useState('');
     const [empl_patronymic, setempl_patronymic] = useState('');
-    const [salary, setsalary] = useState('');
+    const [salary, setsalary] = useState(0);
     const [date_of_birth, setdate_of_birth] = useState('');
     const [date_of_start, setdate_of_start] = useState('');
     const [phone_number, setphone_number] = useState('');
@@ -28,23 +28,23 @@ function Workers(props) {
     const getBooks = () => {
         Axios.get("http://localhost:8888/users/")
             .then(res => {
-                console.log(res.data)
                 setWorkers(res.data)
             })
             .catch(er => console.log(er));
     }
 
 
-    const addToListOfUsers = () => {
+    const addToListOfUsers = (e) => {
+        e.preventDefault();
         Axios.post("http://localhost:8888/users", {
-            id_employee: id_employee,
+           // id_employee: 4,
             empl_surname: empl_surname,
             empl_name: empl_name,
             empl_patronymic: empl_patronymic,
             empl_role: empl_role,
             salary: salary,
-            date_of_birth: date_of_birth,
-            date_of_start: date_of_start,
+            date_of_birth: date_of_birth.slice(0, 10),
+            date_of_start: date_of_start.slice(0, 10),
             phone_number: phone_number,
             city: city,
             street: street,
@@ -54,7 +54,7 @@ function Workers(props) {
         }).then(response => {
             setWorkers([...workers, response.data]);
         });
-        window.location.reload();
+     //   window.location.reload();
     };
     const deleteUser = (id) => {
 
@@ -67,11 +67,11 @@ function Workers(props) {
         document.getElementById('add-worker-pop-up').style.display = 'block';
     };
 
-    const handleEditWorkerClick = ( empl_surname, empl_name, empl_patronymic, empl_role,
-        salary, date_of_birth, date_of_start, phone_number, city, street, zip_code) => {
+    const handleEditWorkerClick = ( id, empl_surname, empl_name, empl_patronymic, empl_role,
+        salary, date_of_birth, date_of_start, phone_number, city, street, zip_code, email, password) => {
         // setShowEditWorkerPopup(true);
         // document.getElementById('edit-worker-pop-up').style.display = 'block';
-
+        setId_employee(id)
         setempl_surname(empl_surname);
         setempl_name(empl_name);
         setempl_patronymic(empl_patronymic);
@@ -84,6 +84,8 @@ function Workers(props) {
         setcity(city);
         setstreet(street);
         setzip_code(zip_code);
+        setemail(email);
+        setpassword(password);
 
         setTimeout(() => {
             const popup = document.getElementById('edit-worker-pop-up');
@@ -94,22 +96,23 @@ function Workers(props) {
     };
 
     const editToListOfUsers = () => {
-        Axios.put(`http://localhost:8888/put/${id_employee}`,{
+        Axios.put(`http://localhost:8888/users`,{
             id_employee: id_employee,
             empl_surname: empl_surname,
             empl_name: empl_name,
             empl_patronymic: empl_patronymic,
             empl_role: empl_role,
             salary: salary,
-            date_of_birth: date_of_birth,
-            date_of_start: date_of_start,
+            date_of_birth: date_of_birth.slice(0, 10),
+            date_of_start: date_of_start.slice(0, 10),
             phone_number: phone_number,
             city: city,
             street: street,
-            zip_code: zip_code
+            zip_code: zip_code,
+            email: email,
+            password: password
         });
         handleClosePopupClick();
-        window.location.reload();
     };
     const handleClosePopupClick = () => {
         document.getElementById('add-worker-pop-up').style.display = 'none';
@@ -167,6 +170,7 @@ function Workers(props) {
                         <td>
 
                             <button onClick={()=> handleEditWorkerClick(
+                                worker.id_employee,
                                 worker.empl_surname,
                                 worker.empl_name,
                                 worker.empl_patronymic,
@@ -177,7 +181,9 @@ function Workers(props) {
                                 worker.phone_number,
                                 worker.city,
                                 worker.street,
-                                worker.zip_code)} className="editButton">Редагувати</button>
+                                worker.zip_code,
+                                worker.email,
+                                worker.password)} className="editButton">Редагувати</button>
                         </td>
                         <td>
                             {<button onClick={()=> deleteUser(worker.id_employee)} className="deleteButton">Видалити</button>}
@@ -202,6 +208,11 @@ function Workers(props) {
                         <br/>
                         <label htmlFor="GET-fathername" className="tab"> Побатькові:</label>
                         <input id="GET-fathername" type="text" name="fathername"  onChange={(event)=>{setempl_patronymic(event.target.value)}}/>
+                        <label htmlFor="position">Посада</label>
+                        <select name="position" id="position" onChange={(event) => { setempl_role(event.target.value) }}>
+                            <option value="cashier" selected>cashier</option>
+                            <option value="manager">manager</option>
+                        </select>
                         <br/><br/>
                         <label htmlFor="GET-dateOfBirth">Дата народження:</label>
                         <input id="GET-dateOfBirth" type="date" name="dateOfBirth"  onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
@@ -226,6 +237,12 @@ function Workers(props) {
                         <label htmlFor="GET-index" className="tab"> Індекс:</label>
                         <input id="GET-index" type="text" name="index"  onChange={(event)=>{setzip_code(event.target.value)}}/>
                         <br/><br/>
+                        <label htmlFor="GET-street">Email:</label>
+                        <input id="GET-street" type="email" name="street" onChange={(event)=>{setemail(event.target.value)}}/>
+                        <br/>
+                        <label htmlFor="GET-index" > Пароль:</label>
+                        <input id="GET-index" type="password" name="index"  onChange={(event)=>{setpassword(event.target.value)}}/>
+                        <br/><br/>
                         <button className="add_good" onClick={addToListOfUsers} type="submit" name="add_good">Додати</button>
                     </form>
 
@@ -249,13 +266,13 @@ function Workers(props) {
                             <input id="GET-fathername" type="text" name="fathername" value={empl_patronymic}  onChange={(event)=>{setempl_patronymic(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfBirth">Дата народження:</label>
-                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth" value={date_of_birth}  onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
+                            <input id="GET-dateOfBirth" type="date" name="dateOfBirth" value={date_of_birth.slice(0, 10)}  onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-salary">Зарплата:</label>
                             <input id="GET-salary" type="number" name="salary" value={salary}  onChange={(event)=>{setsalary(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-dateOfStart">Дата початку роботи:</label>
-                            <input id="GET-dateOfStart" type="date" name="dateOfStart" value={date_of_start}  onChange={(event)=>{setdate_of_start(event.target.value)}}/>
+                            <input id="GET-dateOfStart" type="date" name="dateOfStart" value={date_of_start.slice(0, 10)}  onChange={(event)=>{setdate_of_start(event.target.value)}}/>
                             <br/><br/>
                             <label htmlFor="GET-phone">Телефон:</label>
                             <input id="GET-phone" type="tel" name="phone" value={phone_number}  onChange={(event)=>{setphone_number(event.target.value)}}/>
