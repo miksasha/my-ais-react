@@ -26,25 +26,22 @@ function ManagerGoodsInStore(props) {
     },[]);
 
     const editGoodsInStore = () => {
-        Axios.put("http://localhost:8888/categories", {
+        Axios.put("http://localhost:8888/store_products", {
             upc:upc,
-            upc_prom:upc_prom,
+            upc_prom:null,
             id_product:id_product,
             selling_price:selling_price,
             products_number:products_number,
-            promotional_product:promotional_product,
-
-            category_number:category_number,
-            product_name:product_name,
-            producer:producer,
-            characteristics:characteristics
+            promotional_product:promotional_product ? 1 : 0,
+        }).then(response => {
+            setStoreProduct([...storeProduct, response.data]);
         });
-        document.getElementById('add-GoodInStoreM-pop-up').style.display = 'none';
+       // document.getElementById('add-GoodInStoreM-pop-up').style.display = 'none';
         window.location.reload();
     };
 
     const deleteGoodsInStore = (id) => {
-        Axios.delete(`http://localhost:8888/categories/${id}`);
+        Axios.delete(`http://localhost:8888/store_products/"${id}"`);
         window.location.reload();
     };
 
@@ -85,21 +82,32 @@ function ManagerGoodsInStore(props) {
                     <th>Видалити</th>
                 </tr>
                 {storeProduct.map(g => (
-                    <tr key={g.category_number}>
+                    <tr key={g.upc}>
                     <td>{g.upc}</td>
                     <td>{g.product_name}</td>
                     <td>{g.producer}</td>
                     <td>{g.characteristics}</td>
                     <td>{g.selling_price}</td>
                     <td>{g.products_number}</td>
-                    <td><input type="checkbox" readOnly/></td>
+                    <td><input type="checkbox" readOnly checked={g.promotional_product}/></td>
                     <td>
                         <button onClick={() => {
+
+                            setupc(g.upc);
+                            setid_product(g.id_product);
+                            setproduct_name(g.product_name);
+                            setproducer(g.producer);
+                            setcharacteristics(g.characteristics);
+
+                            setselling_price(g.selling_price);
+                            setproducts_number(g.products_number);
+                            setpromotional_product(g.promotional_product);
+
                             document.getElementById('add-GoodInStoreM-pop-up').style.display = 'block';
                         }}className="editButton">Редагувати</button>
                     </td>
                     <td>
-                        <button onClick={deleteGoodsInStore} className="deleteButton">Видалити</button>
+                        <button onClick={()=>deleteGoodsInStore(g.upc)} className="deleteButton">Видалити</button>
                     </td>
                 </tr>))}
             </table>
@@ -113,25 +121,18 @@ function ManagerGoodsInStore(props) {
                     <h2>Редагування товару</h2>
                     <form>
                         <label htmlFor="name">Назва:</label>
-                        <input type="text" id="name" name="name" required/><br/><br/>
+                        <input type="text" id="name" name="name" readOnly value={product_name}  onChange={(event)=>{setproduct_name(event.target.value)}}/><br/><br/>
                         <label htmlFor="manufacturer">Виробник:</label>
-                        <input type="text" id="manufacturer" name="manufacturer" required/><br/><br/>
-                        <label htmlFor="features">Характеристики:</label>
-                        <textarea id="features" name="features" rows="4" cols="50"></textarea><br/><br/>
-                        <label htmlFor="categories">Категорії:</label>
-                        <input type="text" id="categories" name="categories" required/><br/><br/>
-                        <label htmlFor="availability">Є в наявності:</label>
-                        <input type="checkbox" id="availability" name="availability" value="yes"/><br/><br/>
-                        <div id="additional-fields">
-                            <label htmlFor="price">Ціна товару у грн:</label>
-                            <input type="number" id="price" name="price"/><br/><br/>
+                        <input type="text" id="manufacturer" name="manufacturer" value={producer}  readOnly onChange={(event)=>{setproducer(event.target.value)}}/><br/><br/>
+                        <label htmlFor="price">Ціна товару у грн:</label>
+                            <input type="number" id="price" name="price" value={selling_price}  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
-                            <input type="number" id="quantity" name="quantity"/><br/><br/>
+                            <input type="number" id="quantity" name="quantity" value={products_number}  onChange={(event)=>{setproducts_number(event.target.value)}}/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
-                            <input type="checkbox" id="promo" name="promo" value="yes"/>
-                        </div>
+                            <input type="checkbox" id="promo" name="promo" checked={promotional_product} onChange={(event)=>{setpromotional_product(event.target.value)}}/>
+
                         <br/><br/>
-                        <button className="add_good" type="submit" name="add_good">Редагувати</button>
+                        <button className="add_good" type="submit" name="add_good" onClick={()=>editGoodsInStore()}>Редагувати</button>
                     </form>
                 </div>
             </div>

@@ -64,7 +64,8 @@ function ManagerAllGoods(props) {
         document.getElementById('edit-allGoodM-pop-up').style.display = 'none';
 
         Axios.get(`http://localhost:8888/store_products/"${upc}"`).then(res => {
-            if(res.data.isEmpty || res.data==="") {
+
+            if(res.data.isEmpty || res.data==="" || res.data.length===0) {
                 Axios.post("http://localhost:8888/store_products", {
                     upc: upc,
                     upc_prom: null,
@@ -243,7 +244,7 @@ function ManagerAllGoods(props) {
                                onChange={(event)=>{setisInStore(event.target.checked)}}/><br/><br/>
                         <div id="additional-fields">
                             <label htmlFor="upc">UPC:</label>
-                            <input type="text" id="upc" name="upc" value={upc} onChange={(event)=>{setupc(event.target.value)}}/><br/><br/>
+                            <input type="text" id="upc" name="upc" value={upc} readOnly={!isInStore} onChange={(event)=>{setupc(event.target.value)}}/><br/><br/>
 
                             <label htmlFor="price">Ціна товару у грн:</label>
                             <input type="number" id="price" name="price" value={selling_price}  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
