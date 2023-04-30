@@ -31,6 +31,9 @@ function ManagerLayout(props) {
                 <NavLink to={'/manager/allChecks'}  className={({ isActive }) =>(isActive ? "active" : "noactive")}>
                     Чеки
                 </NavLink>
+                <NavLink to={'/manager/print'}  className={({ isActive }) =>(isActive ? "active" : "noactive")}>
+                    Друк
+                </NavLink>
                 <NavLink to={'/'} id="exit"  className={({ isActive }) =>(isActive ? "active" : "noactive")}>
                     Вийти
                 </NavLink>

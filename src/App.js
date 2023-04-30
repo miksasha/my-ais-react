@@ -15,6 +15,8 @@ import Category from "./Pages/ManagerPages/Category"
 import AllGoodsManager from "./Pages/AllGoods/ManagerAllGoods"
 import GoodsInStoreManager from "./Pages/GoodsInStore/ManagerGoodsInStore"
 import AllCheckManager from "./Pages/Check/ManagerAllChecks"
+import Print from "./Pages/Check/ManagerAllChecks"
+
 import './App.css';
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
             <Route path="/manager/allGoods" element={<AllGoodsManager/>}/>
             <Route path="/manager/goodsInStore" element={<GoodsInStoreManager/>}/>
             <Route path="/manager/allChecks" element={<AllCheckManager/>}/>
+            <Route path="/manager/print" element={<Print/>}/>
         </Routes>
     </BrowserRouter>
   );

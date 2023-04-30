@@ -1,7 +1,41 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import ManagerLayout from "../Layout/ManagerLayout";
+import Axios from "axios";
 
 function ManagerAllChecks(props) {
+    const [check_number, setcheck_number] = useState('');
+    const [id_employee, setid_employee] = useState('');
+    const [card_number, setcard_number] = useState('');
+    const [print_date, setprint_date] = useState('');
+    const [sum_total, setsum_total] = useState('');
+    const [vat, setvat] = useState('');
+
+    const [checks, setChecks] = useState([]);
+    const [checksGoods, setChecksGoods] = useState([]);
+
+    useEffect(() => {
+        Axios.get("http://localhost:8888/checks").then(res => {
+            setChecks(res.data)
+            Axios.get(`http://localhost:8888/getProductsFromXCheck/"check-04-30 18:20:09"`).then(res => {
+                setChecksGoods(prevGoods => [...prevGoods, res.data]);
+            });
+        });
+
+    }, []);
+
+    useEffect(() => {
+        console.log(checksGoods);
+    }, [checksGoods]);
+
+    const deleteCheck = (id) => {
+        Axios.delete(`http://localhost:8888/checks/${id}`);
+        alert(checksGoods)
+        checksGoods.map(c => (
+            alert(c)
+            ));
+            // window.location.reload();
+    };
+
     return (
         <div className="manager-all-checks">
             <ManagerLayout/>
@@ -22,24 +56,30 @@ function ManagerAllChecks(props) {
             </div>
             <h2>Список чеків</h2>
             <div className="listOfChecks">
-                <form className="check" action="">
-                    <fieldset>
-                        <legend>Чек <span>код</span></legend>
-                        <label>Створив: <span className="span-name-cashier">id працівника</span></label> <br/>
-                        <br/>
-                        <label>Дата: <span className="span-name">сьогодняшня дата</span></label> <br/>
-                        <br/>
-                        <label className="good-in-check"><span className="span-name">Toвар</span> - <span
-                            className="span-cont">20</span> шт</label><br/>
-                        <label className="good-price-in-check tab"> <span
-                            className="span-price">300</span> грн</label><br/>
-                        <br/>
-                        <label>Загальна сума: <span></span></label><br/>
-                        <label>ПДВ: <span></span></label><br/>
-                        <button className="create_check" type="submit" name="create_check">Роздрукувати чек</button>
-                        <button className="deleteButton" name="deleteButton">Видалити</button>
-                    </fieldset>
-                </form>
+                {checks.map(c => (
+                    <form className="check">
+                        <fieldset>
+                            <legend>Чек <span>код</span></legend>
+                            <label>Створив: <span className="span-name-cashier">{c.id_employee}</span></label> <br/>
+                            <br/>
+                            <label>Дата: <span className="span-name">{c.print_date.slice(0, 10)}</span></label>
+                            <br/><br/>
+                            {checksGoods.map(g => (
+                                <div>
+                                    <label className="good-in-check"><span
+                                        className="span-name">{g.product_name}</span> - <span
+                                        className="span-cont">{g.product_number}</span> шт</label> <br/>
+                                    <label className="good-price-in-check tab"> <span
+                                        className="span-price">{g.selling_price}</span> грн</label><br/><br/>
+                                </div>
+                            ))}
+                            <label>Загальна сума: <span>{c.sum_total}</span></label><br/>
+                            <label>ПДВ: <span>{c.vat}</span></label><br/>
+                            <button className="deleteButton" name="deleteButton"
+                                    onClick={() => deleteCheck(c.check_number)}>Видалити
+                            </button>
+                        </fieldset>
+                    </form>))}
             </div>
 
             <h2>Загальна сума проданих товарів з чеків:</h2>
