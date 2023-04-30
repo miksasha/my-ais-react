@@ -9,7 +9,7 @@ function ManagerAllGoods(props) {
     const [producer, setproducer] = useState('');
     const [characteristics, setcharacteristics] = useState('');
 
-
+    const [upc, setupc] = useState("");
     const [isInStore, setisInStore] = useState(false);
     const [selling_price, setselling_price] = useState(0);
     const [products_number, setproducts_number] = useState('');
@@ -17,21 +17,39 @@ function ManagerAllGoods(props) {
 
     const [goods, setGoods] = useState([]);
 
+    const [goodsInStore, setGoodsInStore] = useState([]);
+
+
     useEffect(()=>{
         Axios.get("http://localhost:8888/products").then(res => {
             setGoods(res.data)
         })
+
+        Axios.get("http://localhost:8888/store_products").then(res => {
+            setGoodsInStore(res.data)
+        })
     },[]);
 
-    const addGood = (e) => {
-
+    const addGood = () => {
         Axios.post("http://localhost:8888/products", {
             category_number:category_number,
             product_name:product_name,
             producer:producer,
             characteristics:characteristics
         }).then(response => {
+            console.log(response.data)
             setGoods([...goods, response.data]);
+        });
+
+        Axios.post("http://localhost:8888/store_products", {
+            upc:upc,
+            upc_prom:null,
+            id_product: (goods.length+1),
+            selling_price:selling_price,
+            products_number:products_number,
+            promotional_product:promotional_product?1:0
+        }).then(response => {
+            setGoodsInStore([...goodsInStore, response.data]);
         });
     };
 
@@ -44,11 +62,45 @@ function ManagerAllGoods(props) {
             characteristics:characteristics
         });
         document.getElementById('edit-allGoodM-pop-up').style.display = 'none';
-        // window.location.reload();
+
+        Axios.get(`http://localhost:8888/store_products/"${upc}"`).then(res => {
+            if(res.data.isEmpty || res.data==="") {
+                Axios.post("http://localhost:8888/store_products", {
+                    upc: upc,
+                    upc_prom: null,
+                    id_product: id,
+                    selling_price: selling_price,
+                    products_number: products_number,
+                    promotional_product: promotional_product ? 1 : 0
+                }).then(response => {
+                    setGoodsInStore([...goodsInStore, response.data]);
+                });
+            }else {
+                Axios.put("http://localhost:8888/store_products", {
+                    upc: upc,
+                    upc_prom: null,
+                    id_product: id,
+                    selling_price: selling_price,
+                    products_number: products_number,
+                    promotional_product: promotional_product ? 1 : 0
+                }).then(response => {
+                    setGoodsInStore([...goodsInStore, response.data]);
+                });
+            }
+        });
     };
     const deleteGood = (id) => {
         Axios.delete(`http://localhost:8888/products/${id}`);
-        //window.location.reload();
+
+        // for(let i = 0; i<goodsInStore.length; i++) {
+        //     if(id === goodsInStore[i].id_product ) {
+        //         console.log(goodsInStore[i].upc)
+        //         Axios.delete(`http://localhost:8888/store_products/${goodsInStore[i].upc}`);
+        //         break;
+        //     }
+        // }
+
+       window.location.reload();
     };
 
     return (
@@ -92,7 +144,7 @@ function ManagerAllGoods(props) {
                     <td>{g.producer}</td>
                     <td>{g.characteristics}</td>
                     <td>{g.category_number}</td>
-                    <td><input type="checkbox" readOnly/></td>
+                    <td><input type="checkbox" readOnly id={`checkBox_${g.id_product}`}  checked={goodsInStore.some((item) => item.id_product === g.id_product)}/></td>
                     <td>
                         <button onClick={() => {
                             setid_productM(g.id_product);
@@ -100,11 +152,36 @@ function ManagerAllGoods(props) {
                             setproducer(g.producer);
                             setcharacteristics(g.characteristics);
                             setcategory_number(g.category_number);
+
+                            let currentGoodIsExisted =false;
+                            for(let i = 0; i<goodsInStore.length; i++) {
+                                if(g.id_product === goodsInStore[i].id_product ) {
+                                    setisInStore(true);
+                                    currentGoodIsExisted = true;
+                                    setupc(goodsInStore[i].upc);
+                                    setselling_price(goodsInStore[i].selling_price);
+                                    setproducts_number(goodsInStore[i].products_number);
+                                    if(goodsInStore[i].promotional_product===0)setpromotional_product(false);
+                                    else setpromotional_product(true);
+                                    setpromotional_product(goodsInStore[i].promotional_product);
+                                }
+                            }
+                            if(!currentGoodIsExisted) {
+                                setisInStore(false);
+                                setupc("");
+                                setselling_price(0);
+                                setproducts_number(0);
+                                setpromotional_product(false);
+                            }
+                            if(currentGoodIsExisted) {
+                                currentGoodIsExisted =false;
+                            }
+
                             document.getElementById('edit-allGoodM-pop-up').style.display = 'block';
                         }} className="editButton">Редагувати</button>
                     </td>
                     <td>
-                        <button onClick={()=>deleteGood(g.id_productM)} className="deleteButton">Видалити</button>
+                        <button onClick={()=>deleteGood(g.id_product)} className="deleteButton">Видалити</button>
                     </td>
                 </tr>))}
             </table>
@@ -128,12 +205,15 @@ function ManagerAllGoods(props) {
                         <label htmlFor="availability">Є в наявності:</label>
                         <input type="checkbox" id="availability" name="availability" onChange={(event)=>{setisInStore(event.target.value)}}/><br/><br/>
                         <div id="additional-fields">
+                            <label htmlFor="upc">UPC:</label>
+                            <input type="text" id="upc" name="upc" onChange={(event)=>{setupc(event.target.value)}}/><br/><br/>
+
                             <label htmlFor="price">Ціна товару у грн:</label>
-                            <input type="number" id="price" name="price"  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
+                            <input type="number" id="price" name="price" onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
                             <input type="number" id="quantity" name="quantity"  onChange={(event)=>{setproducts_number(event.target.value)}}/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
-                            <input type="checkbox" id="promo" name="promo" value="yes"  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
+                            <input type="checkbox" id="promo" name="promo"  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
                         </div>
                         <br/><br/>
                         <button className="add_good" type="submit" onClick={addGood} name="add_good">Додати</button>
@@ -158,14 +238,20 @@ function ManagerAllGoods(props) {
                         <label htmlFor="categories">Категорії:</label>
                         <input type="text" id="categories" name="categories" required value={category_number} onChange={(event)=>{setcategory_number(event.target.value)}}/><br/><br/>
                         <label htmlFor="availability">Є в наявності:</label>
-                        <input type="checkbox" id="availability" name="availability"  value={isInStore} onChange={(event)=>{setisInStore(event.target.value)}}/><br/><br/>
+                        <input type="checkbox" id="availability" name="availability"
+                               checked={isInStore}
+                               onChange={(event)=>{setisInStore(event.target.checked)}}/><br/><br/>
                         <div id="additional-fields">
+                            <label htmlFor="upc">UPC:</label>
+                            <input type="text" id="upc" name="upc" value={upc} onChange={(event)=>{setupc(event.target.value)}}/><br/><br/>
+
                             <label htmlFor="price">Ціна товару у грн:</label>
                             <input type="number" id="price" name="price" value={selling_price}  onChange={(event)=>{setselling_price(event.target.value)}}/><br/><br/>
                             <label htmlFor="quantity">Кількість одиниць:</label>
                             <input type="number" id="quantity" name="quantity" value={products_number}  onChange={(event)=>{setproducts_number(event.target.value)}}/><br/><br/>
                             <label htmlFor="promo">Чи є товар акційним?</label>
-                            <input type="checkbox" id="promo" name="promo" value={promotional_product}  onChange={(event)=>{setpromotional_product(event.target.value)}}/>
+                            <input type="checkbox" id="promo" name="promo" checked={promotional_product}  onChange={(event)=>{const isChecked = event.target.checked;
+                                setpromotional_product(isChecked);}}/>
                         </div>
                         <br/><br/>
                         <button className="add_good" type="submit" onClick={()=>editGood(id_productM)} name="add_good">Редагувати</button>

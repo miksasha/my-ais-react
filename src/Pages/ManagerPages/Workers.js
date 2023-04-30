@@ -34,8 +34,12 @@ function Workers(props) {
     }
 
 
-    const addToListOfUsers = (e) => {
-        e.preventDefault();
+    const addToListOfUsers = () => {
+        setdate_of_birth(date_of_birth.slice(0, 10));
+        setdate_of_start(date_of_start.slice(0, 10));
+        console.log(date_of_birth)
+        console.log(date_of_start)
+
         Axios.post("http://localhost:8888/users", {
            // id_employee: 4,
             empl_surname: empl_surname,
@@ -43,8 +47,8 @@ function Workers(props) {
             empl_patronymic: empl_patronymic,
             empl_role: empl_role,
             salary: salary,
-            date_of_birth: date_of_birth.slice(0, 10),
-            date_of_start: date_of_start.slice(0, 10),
+            date_of_birth: date_of_birth,
+            date_of_start: date_of_start,
             phone_number: phone_number,
             city: city,
             street: street,
@@ -96,6 +100,7 @@ function Workers(props) {
     };
 
     const editToListOfUsers = () => {
+
         Axios.put(`http://localhost:8888/users`,{
             id_employee: id_employee,
             empl_surname: empl_surname,
@@ -215,13 +220,13 @@ function Workers(props) {
                         </select>
                         <br/><br/>
                         <label htmlFor="GET-dateOfBirth">Дата народження:</label>
-                        <input id="GET-dateOfBirth" type="date" name="dateOfBirth"  onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
+                        <input id="GET-dateOfBirth" type="date" name="dateOfBirth" required onChange={(event)=>{setdate_of_birth(event.target.value)}}/>
                         <br/><br/>
                         <label htmlFor="GET-salary">Зарплата:</label>
-                        <input id="GET-salary" type="number" name="salary"  onChange={(event)=>{setsalary(event.target.value)}}/>
+                        <input id="GET-salary" type="number" name="salary" required onChange={(event)=>{setsalary(event.target.value)}}/>
                         <br/><br/>
                         <label htmlFor="GET-dateOfStart">Дата початку роботи:</label>
-                        <input id="GET-dateOfStart" type="date" name="dateOfStart"  onChange={(event)=>{setdate_of_start(event.target.value)}}/>
+                        <input id="GET-dateOfStart" type="date" name="dateOfStart" required onChange={(event)=>{setdate_of_start(event.target.value)}}/>
                         <br/><br/>
                         <label htmlFor="GET-phone">Телефон:</label>
                         <input id="GET-phone" type="tel" name="phone"  onChange={(event)=>{setphone_number(event.target.value)}}/>
