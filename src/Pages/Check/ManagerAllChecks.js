@@ -16,9 +16,6 @@ function ManagerAllChecks(props) {
     useEffect(() => {
         Axios.get("http://localhost:8888/checks").then(res => {
             setChecks(res.data)
-            Axios.get(`http://localhost:8888/getProductsFromXCheck/"check-04-30 18:20:09"`).then(res => {
-                setChecksGoods(prevGoods => [...prevGoods, res.data]);
-            });
         });
 
     }, []);
