@@ -18,6 +18,7 @@ function ManagerAllGoods(props) {
     const [goods, setGoods] = useState([]);
 
     const [goodsInStore, setGoodsInStore] = useState([]);
+    const [category, setCategory] = useState([]);
 
 
     useEffect(()=>{
@@ -25,8 +26,12 @@ function ManagerAllGoods(props) {
             setGoods(res.data)
         })
 
-        Axios.get("http://localhost:8888/store_products").then(res => {
+        Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
             setGoodsInStore(res.data)
+        })
+
+        Axios.get("http://localhost:8888/categories").then(res => {
+            setCategory(res.data);
         })
     },[]);
 
@@ -104,6 +109,18 @@ function ManagerAllGoods(props) {
        window.location.reload();
     };
 
+    const handleSelectCategory = (event) =>{
+        if(event.target.value === "all"){
+            Axios.get("http://localhost:8888/products").then(res => {
+                setGoods(res.data)
+            })
+        }else {
+            Axios.get(`http://localhost:8888/productsCategory/${event.target.value}`).then(res => {
+                setGoods(res.data)
+            })
+        }
+    }
+
     return (
         <div className="manager-all-goods">
             <ManagerLayout/>
@@ -112,14 +129,14 @@ function ManagerAllGoods(props) {
             <div className="filter">
                 <div className="left-filter">
                     <label htmlFor="filter">Категорія</label>
-                    <select name="filter" id="filter">
-                        <option value="all">будь-яка</option>
-                        <option value="1">____</option>
+                    <select name="filter" id="categoryNumber" onChange={(event) => handleSelectCategory(event)}>
+                        <option value="all" selected>Всі</option>
+                        {category.map(c => (
+                            <option value={c.category_number}>{c.category_name}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_input" className="search" placeholder="Пошук по товарам"/>
-                    <button onClick="" className="searchButton">Шукати</button>
                     <button onClick={() => {
                         document.getElementById('add-allGoodM-pop-up').style.display = 'block';
                     }}
@@ -148,6 +165,7 @@ function ManagerAllGoods(props) {
                     <td><input type="checkbox" readOnly id={`checkBox_${g.id_product}`}  checked={goodsInStore.some((item) => item.id_product === g.id_product)}/></td>
                     <td>
                         <button onClick={() => {
+
                             setid_productM(g.id_product);
                             setproduct_name(g.product_name);
                             setproducer(g.producer);

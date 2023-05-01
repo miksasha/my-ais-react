@@ -54,6 +54,15 @@ function CashierClients(props) {
         window.location.reload();
 
     };
+
+    const searchBySurname = () => {
+        let u =  document.getElementById("search_surname").value;
+        Axios.get(`http://localhost:8888/cardsSurname/"${u}"`).then(res => {
+            setclients(res.data)
+        }).catch(res => {
+            alert("Такого клієнту не існує");
+        })
+    };
     return (
         <div className="all-clients">
             <CashierLayout/>
@@ -64,7 +73,7 @@ function CashierClients(props) {
                 </div>
                 <div className="right-filter">
                     <input type="text" id="search_surname" className="search" placeholder="Пошук по прізвищу"/>
-                    <button onClick="" className="searchButton">Шукати</button>
+                    <button onClick={()=>searchBySurname()} className="searchButton">Шукати</button>
                     <button onClick={() => {
                         document.getElementById('add-client-pop-up').style.display = 'block';
                     }} className="addButton ">Додати клієнта</button>

@@ -1,7 +1,9 @@
 .tableOfGoods{
     width: max-content;
 }
-
+#tableOfGoodsForPrint{
+    width: 100%;
+}
 .filter-client{
     width: 30px;
 }

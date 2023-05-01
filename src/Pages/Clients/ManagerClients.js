@@ -58,6 +58,24 @@ function ManagerClients(props) {
         window.location.reload();
     };
 
+    const searchByPercent = () => {
+        let p =  document.getElementById("filter-client-percent").value;
+
+        if (p === ""){
+            Axios.get("http://localhost:8888/cards").then(res => {
+                setclients(res.data)
+            })
+        }else {
+            Axios.get(`http://localhost:8888/cardsPercent/${p}`).then(res => {
+                setclients(res.data)
+                // alert("Номер карти: " + res.data[0].card_number + "; ПІБ: " + res.data[0].cust_surname +" "+ res.data[0].cust_name +" "+ res.data[0].cust_patronymic + "; Телефон: "
+                //     + res.data[0].phone_number + "; Адреса: " + res.data[0].city +" "+ res.data[0].street+" " + res.data[0].zip_code)
+            }).catch(res => {
+                alert("Такого відсотку ні в кого немає");
+            })
+        }
+    };
+
     return (
         <div className="all-manager-clients">
             <ManagerLayout/>
@@ -66,12 +84,11 @@ function ManagerClients(props) {
             <div className="filter">
                 <div className="left-filter">
                     <label htmlFor="filter-client">Відфільтрувати за відсотком</label>
-                    <input type="number" id="filter-client" className="filter-client"/>
+                    <input type="number" id="filter-client-percent" className="filter-client"/>
                     <label htmlFor="filter-client">%</label>
+                    <button onClick={()=>searchByPercent()} className="searchButton">Шукати</button>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_surname" className="search" placeholder="Пошук по прізвищу"/>
-                    <button onClick="" className="searchButton">Шукати</button>
                     <button onClick={() => {
                         document.getElementById('add-client-pop-up').style.display = 'block';
                     }}

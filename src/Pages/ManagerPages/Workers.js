@@ -22,6 +22,8 @@ function Workers(props) {
 
     const [workers, setWorkers] = useState([]);
 
+    const [onlyCashier, setonlyCashier] = useState("off");
+
     useEffect(() => {
         getBooks();
     }, []);
@@ -126,7 +128,31 @@ function Workers(props) {
         document.getElementById('edit-worker-pop-up').style.display = 'none';
     };
 
+    const handleOnlyCashier = (event) => {
+        if(onlyCashier === "on") {
+            setonlyCashier("off");
+            Axios.get("http://localhost:8888/users/")
+                .then(res => {
+                    setWorkers(res.data)
+                })
+        }
+        else{
+            setonlyCashier("on");
+            Axios.get("http://localhost:8888/allkasirs")
+                .then(res => {
+                    setWorkers(res.data)
+                })
+        }
+    };
 
+    const searchBySurName = () => {
+        let s =  document.getElementById("search_input_surname").value;
+        Axios.get(`http://localhost:8888/findphoneaddbysurname/"${s}"`).then(res => {
+            alert("Телефон: " + res.data[0].phone_number + "; Місто: " + res.data[0].city + "; Вулиця: " + res.data[0].street + "; Індекс: " + res.data[0].zip_code)
+        }).catch(res => {
+            alert("Такого прізвища не існує");
+        })
+    };
     return (
 
         <div className="workers">
@@ -135,11 +161,11 @@ function Workers(props) {
             <div className="filter">
                 <div className="left-filter">
                     <label htmlFor="only_cashier">Тільки касири</label>
-                    <input type="checkbox" id="only_cashier"/>
+                    <input type="checkbox" id="only_cashier" onChange={(event) => handleOnlyCashier(event)}/>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_input" className="search" placeholder="Пошук за прізвищем"/>
-                    <button onClick="" className="searchButton">Шукати</button>
+                    <input type="text" id="search_input_surname" className="search" placeholder="Пошук за прізвищем"/>
+                    <button onClick={()=>searchBySurName()} className="searchButton">Шукати</button>
                     <button onClick={handleAddWorkerClick} className="addButton">Додати працівника
                     </button>
                 </div>

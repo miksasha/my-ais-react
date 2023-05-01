@@ -26,7 +26,6 @@ function CashierProfile() {
 
     globalValueOfID = id_employee;
 
-    alert(globalValueOfID)
 
 
     return (

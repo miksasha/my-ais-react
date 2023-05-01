@@ -42,9 +42,7 @@ function CreateCheck(props) {
         Axios.get("http://localhost:8888/cards").then(res => {
             setcard_numbers(res.data)
         })
-        Axios.get("http://localhost:8888/getMaxCheck").then(res => {
-            setcheck_number(res.data[0].last_id)
-        })
+
     }, []);
 
     const addProduct = (upc, name, price) => {
@@ -84,33 +82,33 @@ function CreateCheck(props) {
     const createACheck = (e) => {
         e.preventDefault();
         Axios.post("http://localhost:8888/checks", {
-            check_number: "check" + new Date().toISOString().replace("T", " ").slice(0, -5).slice(4, 20),
+            check_number: "check" + new Date().toISOString().replace("T", "_").slice(0, -5).slice(4, 20),
             card_number: card_number,
             id_employee: globalValueOfID,
             print_date: new Date().toISOString().replace("T", " ").slice(0, -5),
             sum_total: checkPrice,
             vat: checkVat
-        }).then(response => {
-            setchecks([...checks, response.data]);
-        });
-
-        setTimeout(function () {
-            alert(check_number)
+        }).then(res => {
+            setchecks([...checks, res.data]);
             goodsInCheck.map(g => (
                 Axios.post("http://localhost:8888/sales", {
                     upc: g[0],
-                    check_number: check_number,
+                    check_number: res.data,
                     product_number: g[3],
                     selling_price: g[2]
                 }).then(response => {
                     setchecks([...checks, response.data]);
+                }).catch(response => {
                 })
             ));
+        }).catch(response => {
+        });
 
+
+            alert("Чек створено")
             setgoodsInCheck([]);
-        }, 7000);
 
-        //window.location.reload();
+        window.location.reload();
     };
 
     return (
@@ -139,8 +137,7 @@ function CreateCheck(props) {
                 </fieldset>
             </form>
 
-            <input type="text" id="search_for_check" className="search_for_check" placeholder="Пошук по товарам"/>
-            <table className="tableOfGoods_check">
+           <table className="tableOfGoods_check">
                 <tr id="main-row">
                     <th>UPC</th>
                     <th>Назва</th>

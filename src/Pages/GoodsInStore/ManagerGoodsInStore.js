@@ -18,9 +18,12 @@ function ManagerGoodsInStore(props) {
 
     const [storeProduct, setStoreProduct] = useState([]);
 
+    const [selectNameNumber, setselectNameNumber] = useState('name');
+
+    const [selecrPromotion, setselecrPromotion] = useState('all');
+
     useEffect(()=>{
         Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
-
             setStoreProduct(res.data)
         })
     },[]);
@@ -53,20 +56,20 @@ function ManagerGoodsInStore(props) {
             <div className="filter">
                 <div className="left-filter">
                     <p>Сортувати за</p>
-                    <select name="filter">
+                    <select name="filter" onChange={(event)=>{handleSelectNameNumber(event)} }>
                         <option value="name">Назвою</option>
                         <option value="number">К-сть одиниць</option>
                     </select>
                     <p>Є акційним:</p>
-                    <select name="filter">
+                    <select name="filter" onChange={(event)=>{handleSelectPromotional(event)}}>
                         <option value="all">Всі</option>
                         <option value="sale">Акційні</option>
                         <option value="nosale">Не акційні</option>
                     </select>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_input" className="search_input" placeholder="Пошук по товарам"/>
-                    <button onClick="" className="searchButton">Шукати</button>
+                    <input type="text" id="search_input_upc" className="search_input" placeholder="Пошук по UPC"/>
+                    <button onClick={()=>searchByUPC()} className="searchButton" >Шукати</button>
                 </div>
             </div>
             <table className="tableOfGoods">

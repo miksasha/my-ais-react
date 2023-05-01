@@ -23,18 +23,90 @@ function ManagerAllChecks(props) {
 
     }, []);
 
-    useEffect(() => {
-        console.log(checksGoods);
-    }, [checksGoods]);
 
     const deleteCheck = (id) => {
         Axios.delete(`http://localhost:8888/checks/${id}`);
-        alert(checksGoods)
-        checksGoods.map(c => (
-            alert(c)
-            ));
-            // window.location.reload();
+
+        // window.location.reload();
     };
+
+    const countProducts = () => {
+        const idP = document.getElementById("product_id_for_countProducts").value;
+        const startDate = document.getElementById("start_date_for_countProducts").value;
+        const finishDate = document.getElementById("finish_date_for_countProducts").value;
+
+        Axios.post("http://localhost:8888/getAmountOfProductSailedForPeriod", {
+            id_product : idP,
+            date_start : startDate,
+            date_end: finishDate
+        }).then(response => {
+            if(response.data[0].amount === null){
+                document.getElementById("numberOfGoods").innerText = "0";
+            }else {
+                document.getElementById("numberOfGoods").innerText = response.data[0].amount;
+            }
+            //setchecks([...checks, response.data]);
+        })
+
+    };
+
+    const searchChecksByOneCashier = () => {
+        const idE = document.getElementById("cashier_id").value;
+        const startDate = document.getElementById("start_date_for_cashier").value;
+        const finishDate = document.getElementById("finish_date_for_cashier").value;
+
+        if(idE === ""){
+            Axios.post("http://localhost:8888/getAllChecksByAllCashiersForPeriod", {
+                print_date_start: startDate,
+                print_date_end: finishDate
+            }).then(response => {
+                setChecks(response.data)
+            })
+
+            Axios.post("http://localhost:8888/getSumChecksByAllCashiersForPeriod", {
+                print_date_start: startDate,
+                print_date_end: finishDate
+            }).then(response => {
+                document.getElementById("allEarnedMoney").innerText = response.data[0].sum;
+            })
+        }else {
+            Axios.post("http://localhost:8888/getAllChecksByCashierForPeriod", {
+                id_employee: idE,
+                print_date_start: startDate,
+                print_date_end: finishDate
+            }).then(response => {
+                setChecks(response.data)
+            })
+
+            Axios.post("http://localhost:8888/getSumChecksByCashierForPeriod", {
+                id_employee: idE,
+                print_date_start: startDate,
+                print_date_end: finishDate
+            }).then(response => {
+                document.getElementById("allEarnedMoney").innerText = response.data[0].sum;
+            })
+        }
+
+    };
+
+    const goodsInCheck = (id_check) => {
+        // eslint-disable-next-line no-restricted-globals
+        event.preventDefault();
+        const container = document.getElementById("AllProductsInCheck_"+id_check);
+        Axios.get(`http://localhost:8888/getProductsFromXCheck/${id_check}`).then(res => {
+            setChecksGoods(prevGoods => [...prevGoods, res.data]);
+
+            let htmlStr = "";
+
+            for(let i = 0; i<res.data.length; i++){
+                htmlStr += '<label class="good-in-check"><span class="span-name">' +res.data[i].product_name + '</span> - <span class="span-cont">'+ res.data[i].product_number +'</span> шт</label> <br/>'+
+                    '<label class="good-price-in-check tab"> <span class="span-price">' +res.data[i].selling_price +'</span> грн</label><br/><br/>'
+            }
+            container.insertAdjacentHTML('beforebegin', htmlStr);
+            //container.innerHTML = htmlStr;
+        });
+
+    }
 
     return (
         <div className="manager-all-checks">
@@ -43,15 +115,13 @@ function ManagerAllChecks(props) {
             <div className="filter check-filter">
                 <div className="left-filter">
                     <label htmlFor="cashier">Якщо цікавлять чеки одного касира введіть його ID</label>
-                    <input type="text" id="cashier" className="cashier"/>
+                    <input type="text" id="cashier_id" className="cashier"/>
                     <label htmlFor="data-period1">Введіть період</label>
-                    <input type="date" id="data-period1" className="data-period"/>
-                    <input type="date" id="data-period2" className="data-period"/>
-                    <button className="searchButton">Пошук</button>
+                    <input type="date" id="start_date_for_cashier" className="data-period"/>
+                    <input type="date" id="finish_date_for_cashier" className="data-period"/>
+                    <button className="searchButton" onClick={()=>searchChecksByOneCashier()}>Пошук</button>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_check" className="search" placeholder="Пошук по номеру чеку"/>
-                    <button onClick="" className="searchButton">Шукати</button>
                 </div>
             </div>
             <h2>Список чеків</h2>
@@ -59,20 +129,16 @@ function ManagerAllChecks(props) {
                 {checks.map(c => (
                     <form className="check">
                         <fieldset>
-                            <legend>Чек <span>код</span></legend>
+                            <legend>Чек <span>{c.check_number}</span></legend>
                             <label>Створив: <span className="span-name-cashier">{c.id_employee}</span></label> <br/>
                             <br/>
                             <label>Дата: <span className="span-name">{c.print_date.slice(0, 10)}</span></label>
                             <br/><br/>
-                            {checksGoods.map(g => (
-                                <div>
-                                    <label className="good-in-check"><span
-                                        className="span-name">{g.product_name}</span> - <span
-                                        className="span-cont">{g.product_number}</span> шт</label> <br/>
-                                    <label className="good-price-in-check tab"> <span
-                                        className="span-price">{g.selling_price}</span> грн</label><br/><br/>
+                            <button className="addButton" onClick={()=>goodsInCheck(c.check_number)}>Продані товари</button>
+
+                                <div id= {`AllProductsInCheck_${c.check_number}`}>
                                 </div>
-                            ))}
+
                             <label>Загальна сума: <span>{c.sum_total}</span></label><br/>
                             <label>ПДВ: <span>{c.vat}</span></label><br/>
                             <button className="deleteButton" name="deleteButton"
@@ -83,16 +149,16 @@ function ManagerAllChecks(props) {
             </div>
 
             <h2>Загальна сума проданих товарів з чеків:</h2>
-            <p><span id="allEarnedMoney">3030</span> грн</p>
+            <p><span id="allEarnedMoney">0</span> грн</p>
             <h3>Загальна кількість проданого товару</h3>
             <div className="numberOfG">
-                <input type="text" placeholder="id товару"/>
+                <input type="text" placeholder="id товару" id="product_id_for_countProducts"/>
                 <p>за період з</p>
-                <input type="date"/>
+                <input type="date" id="start_date_for_countProducts"/>
                 <p>по</p>
-                <input type="date"/>
-                <button className="addButton">Обрахувати</button>
-                <p><span id="numberOfGoods">22</span> шт</p>
+                <input type="date" id="finish_date_for_countProducts"/>
+                <button className="addButton" onClick={()=>countProducts()}>Обрахувати</button>
+                <p><span id="numberOfGoods">0</span> шт</p>
             </div>
         </div>
     );

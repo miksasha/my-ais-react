@@ -22,16 +22,41 @@ function CashierAllGoods(props) {
 
     const [goodsInStore, setGoodsInStore] = useState([]);
 
+    const [category, setCategory] = useState([]);
 
     useEffect(()=>{
         Axios.get("http://localhost:8888/products").then(res => {
             setGoods(res.data)
         })
 
-        Axios.get("http://localhost:8888/store_products").then(res => {
+        Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
             setGoodsInStore(res.data)
         })
+
+        Axios.get("http://localhost:8888/categories").then(res => {
+            setCategory(res.data);
+        })
     },[]);
+
+    const handleSelectCategory = (event) =>{
+        if(event.target.value === "all"){
+            Axios.get("http://localhost:8888/products").then(res => {
+                setGoods(res.data)
+            })
+        }else {
+            Axios.get(`http://localhost:8888/productsCategory/${event.target.value}`).then(res => {
+                setGoods(res.data)
+            })
+        }
+    }
+    const searchByName = () => {
+        let u =  document.getElementById("search_input_name").value;
+        Axios.get(`http://localhost:8888/productsName/"${u}"`).then(res => {
+                setGoods(res.data)
+             }).catch(res => {
+            alert("Такого товару не існує");
+        })
+    };
 
     return (
         <div className="goods">
@@ -41,14 +66,16 @@ function CashierAllGoods(props) {
             <div className="filter">
                 <div className="left-filter">
                     <label htmlFor="filter">Категорія</label>
-                    <select name="filter" id="filter">
-                        <option value="all">будь-яка</option>
-                        <option value="1">____</option>
+                    <select name="filter" id="filter"  onChange={(event) => handleSelectCategory(event)}>
+                        <option value="all" selected>Всі</option>
+                        {category.map(c => (
+                            <option value={c.category_number}>{c.category_name}</option>
+                        ))}
                     </select>
                 </div>
                 <div className="right-filter">
-                    <input type="text" id="search_input" className="search" placeholder="Пошук по товарам"/>
-                    <button onClick="" className="searchButton">Шукати</button>
+                    <input type="text" id="search_input_name" className="search" placeholder="Пошук за назвою"/>
+                    <button onClick={()=>searchByName()} className="searchButton">Шукати</button>
                 </div>
             </div>
             <table className="tableOfGoods">

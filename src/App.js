@@ -15,7 +15,7 @@ import Category from "./Pages/ManagerPages/Category"
 import AllGoodsManager from "./Pages/AllGoods/ManagerAllGoods"
 import GoodsInStoreManager from "./Pages/GoodsInStore/ManagerGoodsInStore"
 import AllCheckManager from "./Pages/Check/ManagerAllChecks"
-import Print from "./Pages/Check/ManagerAllChecks"
+import Print from "./Pages/ManagerPages/Print"
 
 import './App.css';
 
