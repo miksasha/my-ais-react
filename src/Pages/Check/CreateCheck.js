@@ -30,7 +30,7 @@ function CreateCheck(props) {
 
     const [card_numbers, setcard_numbers] = useState([]);
 
-    const [checks, setchecks] = useState(0);
+    const [checks, setchecks] = useState([]);
 
     let [goodsInCheck, setgoodsInCheck] = useState([]);
 

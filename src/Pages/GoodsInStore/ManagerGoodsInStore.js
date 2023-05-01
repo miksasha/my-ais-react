@@ -48,6 +48,87 @@ function ManagerGoodsInStore(props) {
         window.location.reload();
     };
 
+    const handleSelectNameNumber = (event) =>{
+        setselectNameNumber(event.target.value)
+
+        if(event.target.value === "name" ){
+            if(selecrPromotion === "all"){
+                Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
+                    setStoreProduct(res.data)
+                })
+
+            }else if (selecrPromotion === "sale"){
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_FOR_SALE").then(res => {
+                    setStoreProduct(res.data)
+                })
+            } else{
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_NOT_FOR_SALE").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }
+        }
+        else {
+            if(selecrPromotion === "all"){
+                Axios.get("http://localhost:8888/getAllStore_productByNumber").then(res => {
+                    setStoreProduct(res.data)
+                })
+
+            }else if (selecrPromotion === "sale"){
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_FOR_SALE_SORT_BY_NUMBER").then(res => {
+                    setStoreProduct(res.data)
+                })
+            } else{
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_NOT_FOR_SALE_BY_NUMBER").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }
+        }
+    }
+
+    const handleSelectPromotional = (event) =>{
+        setselecrPromotion(event.target.value)
+        if(event.target.value === "all" ){
+            if(selectNameNumber === "name" ){
+                Axios.get("http://localhost:8888/getAllStore_productWithProductCharacteristics").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }else{
+
+                Axios.get("http://localhost:8888/getAllStore_productByNumber").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }
+        } else if(event.target.value === "sale" ){
+            if(selectNameNumber === "name" ){
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_FOR_SALE").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }else{
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_FOR_SALE_SORT_BY_NUMBER").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }
+        }else{
+            if(selectNameNumber === "name" ){
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_NOT_FOR_SALE").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }else{
+                Axios.get("http://localhost:8888/aLL_PRODUCTS_NOT_FOR_SALE_BY_NUMBER").then(res => {
+                    setStoreProduct(res.data)
+                })
+            }
+        }
+    }
+
+    const searchByUPC = () => {
+        let u =  document.getElementById("search_input_upc").value;
+        Axios.get(`http://localhost:8888/getStore_productWithProductCharacteristics/${u}`).then(res => {
+            alert("Назва: " + res.data[0].product_name + "; Ціна: " + res.data[0].selling_price + "; К-сть наявних: " + res.data[0].products_number + "; Характеристика: " + res.data[0].characteristics)
+        }).catch(res => {
+            alert("Такого UPC не існує");
+        })
+    };
     return (
         <div className="manager_goods_in_store">
             <ManagerLayout/>
