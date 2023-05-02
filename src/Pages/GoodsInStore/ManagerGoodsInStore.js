@@ -129,6 +129,41 @@ function ManagerGoodsInStore(props) {
             alert("Такого UPC не існує");
         })
     };
+    const getGoods = () => {
+        const container = document.getElementById("additionalFunctions_Goods");
+        Axios.get(`http://localhost:8888/additionalNotNot1`).then(res => {
+
+            let htmlRows = '';
+            res.data.map(worker => {
+                htmlRows += '<tr key=' + worker.upc + '>\n' +
+                    '  <td>' + worker.upc + '</td>\n' +
+                    '  <td>' + worker.id_product + '</td>\n' +
+                    '  <td>' + worker.selling_price + '</td>\n' +
+                    '  <td>' + worker.products_number + '</td>\n' +
+                    '</tr>\n';
+            });
+            let htmlStr = '   <table   className="tableOfGoodsForPrint">\n' +
+                '                <thead><tr>\n' +
+                '                    <th>UPC</th>\n' +
+                '                    <th>ID</th>\n' +
+                '                    <th>Ціна</th>\n' +
+                '   <th>Кількість одииць</th>\n'+
+                '                </tr></thead>\n' +
+                '                <tbody>' +
+                htmlRows +
+                '  </tbody>\n' +
+                '</table>';
+
+            container.innerHTML = htmlStr;
+        });
+    }
+    const getNumberGoods = () => {
+        const container = document.getElementById("additionalFunctions_differentNumberOfGoods");
+        Axios.get(`http://localhost:8888/additionalGroupBy1/${document.getElementById("category_id_for_getGoods").value}`).then(res => {
+
+            container.innerHTML = res.data[0].total_quantity + " шт";
+        });
+    }
     return (
         <div className="manager_goods_in_store">
             <ManagerLayout/>
@@ -195,6 +230,22 @@ function ManagerGoodsInStore(props) {
                     </td>
                 </tr>))}
             </table>
+
+
+            <div className="numberOfG">
+                <p>Товари в магазині, що є у всіх чеках</p>
+                <button className="addButton" onClick={()=>getGoods()}>Знайти</button>
+                <br/>
+            </div>
+            <div id="additionalFunctions_Goods"></div>
+
+            <div className="numberOfG">
+                <p>Кількість одиниць товару такої категорії</p>
+                <input type="text" placeholder="id категорії" id="category_id_for_getGoods"/>
+                <button className="addButton" onClick={()=>getNumberGoods()}>Знайти</button>
+                <br/>
+                <span id="additionalFunctions_differentNumberOfGoods"></span>
+            </div>
 
             <div id="add-GoodInStoreM-pop-up" className="modal">
                 <div className="modal-content">

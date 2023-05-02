@@ -76,6 +76,35 @@ function ManagerClients(props) {
         }
     };
 
+    const getNumberOfCashier = () => {
+        const container = document.getElementById("additionalFunctionsNumberOfCashier");
+        Axios.get(`http://localhost:8888/additionalGroupBy2/${document.getElementById("number_of_cashier").value}`).then(res => {
+            let htmlRows = '';
+            res.data.map(client => {
+                htmlRows += '<tr key=' + client.card_number + '>\n' +
+                    '  <td>' + client.card_number + '</td>\n' +
+                    '  <td>' + client.cust_surname + ' ' + client.cust_name + ' ' + client.cust_patronymic + '</td>\n' +
+                    '  <td>' + client.phone_number + '</td>\n' +
+                    '  <td>' + client.city + ' ' + client.street + ' ' + client.zip_code + '</td>\n' +
+                    '  <td>' + client.percent + '</td>\n' +
+                    '</tr>\n';
+            });
+            let htmlStr = '   <table className="tableOfGoods">\n' +
+                '                <thead><tr>\n' +
+                '  <th>Номер карти</th>\n' +
+                '   <th>ПІБ</th>\n' +
+                '<th>Телефон</th>\n' +
+                '<th>Адреса</th>\n' +
+                '<th>Відсоток</th>\n' +
+                '                </tr></thead>\n' +
+                '                <tbody>' +
+                htmlRows +
+                '  </tbody>\n' +
+                '</table>';
+
+            container.innerHTML = htmlStr;
+        });
+    }
     return (
         <div className="all-manager-clients">
             <ManagerLayout/>
@@ -133,6 +162,14 @@ function ManagerClients(props) {
                     </td>
                 </tr>))}
             </table>
+
+            <div className="numberOfG">
+                <label>Всі клієнти, які обслуговувались хоча б такою к-стю касирів: </label>
+                <input type="text" placeholder="кількість" id="number_of_cashier"/>
+                <button className="addButton" onClick={()=>getNumberOfCashier()}>Знайти</button>
+                <br/>
+            </div>
+            <div id="additionalFunctionsNumberOfCashier"></div>
 
             <div id="add-client-pop-up" className="modal">
                 <div className="modal-content">

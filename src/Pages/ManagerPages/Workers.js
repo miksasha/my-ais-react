@@ -153,6 +153,9 @@ function Workers(props) {
             alert("Такого прізвища не існує");
         })
     };
+
+
+
     return (
 
         <div className="workers">
@@ -222,6 +225,8 @@ function Workers(props) {
                     </tr>
                 ))}</tbody>
             </table>
+
+
 
             <div id="add-worker-pop-up" className="modal">
                 <div className="modal-content">

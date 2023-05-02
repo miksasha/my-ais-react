@@ -104,6 +104,75 @@ function ManagerAllChecks(props) {
         });
 
     }
+    const countCashiers = () => {
+        const container = document.getElementById("additionalFunctionsResult");
+        Axios.get(`http://localhost:8888/additionalNotNot3`).then(res => {
+            let htmlRows = '';
+            res.data.map(worker => {
+                htmlRows += '<tr key=' + worker.id_employee + '>\n' +
+                    '  <td>' + worker.id_employee + '</td>\n' +
+                    '  <td>' + worker.empl_surname + ' ' + worker.empl_name + ' ' + worker.empl_patronymic + '</td>\n' +
+                    '  <td>' + worker.empl_role + '</td>\n' +
+                    '  <td>' + worker.salary + '</td>\n' +
+                    '  <td>' + worker.date_of_start + '</td>\n' +
+                    '  <td>' + worker.date_of_birth + '</td>\n' +
+                    '  <td>' + worker.phone_number + '</td>\n' +
+                    '  <td>' + worker.city + '</td>\n' +
+                    '  <td>' + worker.street + '</td>\n' +
+                    '  <td>' + worker.zip_code + '</td>\n' +
+                    '</tr>\n';
+            });
+            let htmlStr = '   <table  className="tableOfGoods">\n' +
+                '                <thead><tr>\n' +
+                '                    <th>ID</th>\n' +
+                '                    <th>ПІБ</th>\n' +
+                '                    <th>Посада</th>\n' +
+                '                    <th>Зарплата</th>\n' +
+                '                    <th>Дата початку роботи</th>\n' +
+                '                    <th>Дата народження</th>\n' +
+                '                    <th>Телефон</th>\n' +
+                '                    <th>Місто</th>\n' +
+                '                    <th>Вулиця</th>\n' +
+                '                    <th>Індекс</th>\n' +
+                '                </tr></thead>\n' +
+                '                <tbody>' +
+                htmlRows +
+                '  </tbody>\n' +
+                '</table>';
+
+            container.innerHTML = htmlStr;
+        });
+    }
+
+    const countClients = () => {
+        const container = document.getElementById("additionalFunctionsResultClient");
+        Axios.get(`http://localhost:8888/additionalNotNot2`).then(res => {
+            let htmlRows = '';
+            res.data.map(worker => {
+                htmlRows += '<tr key=' + worker.card_number + '>\n' +
+                    '  <td>' + worker.card_number + '</td>\n' +
+                    '  <td>' + worker.cust_surname + ' ' + worker.cust_name + ' ' + worker.cust_patronymic + '</td>\n' +
+                    '  <td>' + worker.phone_number + '</td>\n' +
+                    '  <td>' + worker.city + ' ' + worker.street + ' ' + worker.zip_code + '</td>\n' +
+                    '  <td>' + worker.percent + '</td>\n' +
+                    '</tr>\n';
+            });
+            let htmlStr = '   <table   className="tableOfGoods">\n' +
+                '                <thead><tr>\n' +
+                '  <th>Номер карти</th>\n' +
+                '   <th>ПІБ</th>\n' +
+                '<th>Телефон</th>\n' +
+                '<th>Адреса</th>\n' +
+                '<th>Відсоток</th>\n' +
+                '                </tr></thead>\n' +
+                '                <tbody>' +
+                htmlRows +
+                '  </tbody>\n' +
+                '</table>';
+
+            container.innerHTML = htmlStr;
+        });
+    }
 
     return (
         <div className="manager-all-checks">
@@ -157,6 +226,19 @@ function ManagerAllChecks(props) {
                 <button className="addButton" onClick={()=>countProducts()}>Обрахувати</button>
                 <p><span id="numberOfGoods">0</span> шт</p>
             </div>
+            <div className="numberOfG">
+                <p>Касирів що видавали чек всім клієнтам</p>
+                <button className="addButton" onClick={()=>countCashiers()}>Знайти</button>
+                <br/>
+            </div>
+            <div id="additionalFunctionsResult"></div>
+
+            <div className="numberOfG">
+                <p>Клієнти, яким виписали чек всі касири</p>
+                <button className="addButton" onClick={()=>countClients()}>Знайти</button>
+                <br/>
+            </div>
+            <div id="additionalFunctionsResultClient"></div>
         </div>
     );
 }

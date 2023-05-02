@@ -121,6 +121,30 @@ function ManagerAllGoods(props) {
         }
     }
 
+    const getCategories = () => {
+        const container = document.getElementById("additionalFunctionsResultCategories");
+        Axios.get(`http://localhost:8888/additionalGroupBy3/${document.getElementById("producer_for_countProducts").value}`).then(res => {
+            let htmlRows = '';
+            res.data.map(category => {
+                htmlRows += '<tr key=' + category.category_number + '>\n' +
+                    '  <td>' + category.category_number + '</td>\n' +
+                    '  <td>' + category.category_name + '</td>\n' +
+                    '</tr>\n';
+            });
+            let htmlStr = '   <table className="tableOfGoodsForPrint">\n' +
+                '                <thead><tr>\n' +
+                '  <th>ID</th>\n' +
+                '   <th>Назва категорії</th>\n' +
+                '                </tr></thead>\n' +
+                '                <tbody>' +
+                htmlRows +
+                '  </tbody>\n' +
+                '</table>';
+
+            container.innerHTML = htmlStr;
+        });
+    }
+
     return (
         <div className="manager-all-goods">
             <ManagerLayout/>
@@ -204,6 +228,14 @@ function ManagerAllGoods(props) {
                     </td>
                 </tr>))}
             </table>
+
+            <div className="numberOfG">
+                <label>Всі категорії, у яких є більше одного товару однакового виробника: </label>
+                <input type="text" placeholder="виробник" id="producer_for_countProducts"/>
+                <button className="addButton" onClick={()=>getCategories()}>Знайти</button>
+                <br/>
+            </div>
+            <div id="additionalFunctionsResultCategories"></div>
 
             <div id="add-allGoodM-pop-up" className="modal">
                 <div className="modal-content">
